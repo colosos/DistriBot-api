@@ -11,12 +11,20 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
+using DistriBotAPI.Authentication;
+using Microsoft.AspNet.Identity;
 
 namespace DistriBotAPI.Controllers
 {
     public class SalesmenController : ApiController
     {
         private Context db = new Context();
+        private AuthRepository _repo = null;
+
+        public SalesmenController()
+        {
+            _repo = new AuthRepository();
+        }
 
         // GET: api/Salesmen
         public IQueryable<Salesman> GetSalesmen()
@@ -80,7 +88,7 @@ namespace DistriBotAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            IdentityResult result = await _repo.RegisterUser(salesman);
             db.Salesmen.Add(salesman);
             await db.SaveChangesAsync();
 
