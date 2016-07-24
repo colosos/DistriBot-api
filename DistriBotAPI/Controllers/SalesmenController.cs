@@ -27,9 +27,10 @@ namespace DistriBotAPI.Controllers
         }
 
         // GET: api/Salesmen
-        public IQueryable<Salesman> GetSalesmen()
+        public IEnumerable<Salesman> GetSalesmen()
         {
-            return db.Salesmen;
+            return db.Salesmen.ToList();
+            //return new List<Salesman>();
         }
 
         // GET: api/Salesmen/5

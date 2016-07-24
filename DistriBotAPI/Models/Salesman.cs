@@ -9,7 +9,7 @@ namespace DistriBotAPI.Models
     public class Salesman
     {
         public int Id { get; set; }
-        
+
         public string Name { get; set; }
 
         public string UserName { get; set; }
@@ -19,5 +19,10 @@ namespace DistriBotAPI.Models
 
         [NotMapped]
         public string ConfirmPassword { get; set; }
+
+        public Salesman()
+        {
+
+        }
     }
 }

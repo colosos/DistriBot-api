@@ -11,5 +11,8 @@ namespace DistriBotAPI.Contexts
     public class Context : IdentityDbContext<IdentityUser>
     {
         public DbSet<Salesman> Salesmen { get; set; }
+
+        public System.Data.Entity.DbSet<Product> Products { get; set; }
+
     }
 }
