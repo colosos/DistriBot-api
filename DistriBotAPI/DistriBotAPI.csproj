@@ -28,6 +28,17 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PublishDatabaseSettings>
+      <Objects>
+        <ObjectGroup Name="Context-Implementación" Order="1">
+          <Destination Path="" />
+          <Object Type="DbFullSql">
+            <PreSource Path="Data Source=tcp:distribotserver.database.windows.net,1433%3bInitial Catalog=DistriBotDB%3bPersist Security Info=False%3bUser ID=distribot%40distribotserver%3bPassword=Admin2016%3bConnect Timeout=30%3bEncrypt=True%3bTrustServerCertificate=False" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Debug\AutoScripts\Context-Implementación_SchemaOnly.sql" Transacted="True" />
+          </Object>
+        </ObjectGroup>
+      </Objects>
+    </PublishDatabaseSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -194,10 +205,6 @@
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\SalesmenController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="Migrations\201607232156444_Name.cs" />
-    <Compile Include="Migrations\201607232156444_Name.Designer.cs">
-      <DependentUpon>201607232156444_Name.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Salesman.cs" />
@@ -215,11 +222,6 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201607232156444_Name.resx">
-      <DependentUpon>201607232156444_Name.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

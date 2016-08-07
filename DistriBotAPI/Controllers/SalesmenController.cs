@@ -29,7 +29,10 @@ namespace DistriBotAPI.Controllers
         // GET: api/Salesmen
         public IEnumerable<Salesman> GetSalesmen()
         {
-            return db.Salesmen.ToList();
+            using (var ctx = new Context())
+            {
+                return ctx.Salesmen.ToList();
+            }
             //return new List<Salesman>();
         }
 
