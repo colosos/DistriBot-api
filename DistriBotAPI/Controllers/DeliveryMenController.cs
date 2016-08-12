@@ -11,58 +11,55 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
-using DistriBotAPI.Authentication;
 using Microsoft.AspNet.Identity;
+using DistriBotAPI.Authentication;
 
 namespace DistriBotAPI.Controllers
 {
-    public class SalesmenController : ApiController
+    public class DeliveryMenController : ApiController
     {
         private Context db = new Context();
         private AuthRepository _repo = null;
 
-        public SalesmenController()
+        public DeliveryMenController()
         {
             _repo = new AuthRepository();
         }
 
-        // GET: api/Salesmen
-        public IEnumerable<Salesman> GetSalesmen()
+        // GET: api/DeliveryMen
+        public IQueryable<DeliveryMan> GetDeliveryMen()
         {
-            using (var ctx = new Context())
-            {
-                return ctx.Salesmen.ToList();
-            }
+            return db.DeliveryMen;
         }
 
-        // GET: api/Salesmen/5
-        [ResponseType(typeof(Salesman))]
-        public async Task<IHttpActionResult> GetSalesman(int id)
+        // GET: api/DeliveryMen/5
+        [ResponseType(typeof(DeliveryMan))]
+        public async Task<IHttpActionResult> GetDeliveryMan(int id)
         {
-            Salesman salesman = await db.Salesmen.FindAsync(id);
-            if (salesman == null)
+            DeliveryMan deliveryMan = await db.DeliveryMen.FindAsync(id);
+            if (deliveryMan == null)
             {
                 return NotFound();
             }
 
-            return Ok(salesman);
+            return Ok(deliveryMan);
         }
 
-        // PUT: api/Salesmen/5
+        // PUT: api/DeliveryMen/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutSalesman(int id, Salesman salesman)
+        public async Task<IHttpActionResult> PutDeliveryMan(int id, DeliveryMan deliveryMan)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != salesman.Id)
+            if (id != deliveryMan.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(salesman).State = EntityState.Modified;
+            db.Entry(deliveryMan).State = EntityState.Modified;
 
             try
             {
@@ -70,7 +67,7 @@ namespace DistriBotAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SalesmanExists(id))
+                if (!DeliveryManExists(id))
                 {
                     return NotFound();
                 }
@@ -83,35 +80,35 @@ namespace DistriBotAPI.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Salesmen
-        [ResponseType(typeof(Salesman))]
-        public async Task<IHttpActionResult> PostSalesman(Salesman salesman)
+        // POST: api/DeliveryMen
+        [ResponseType(typeof(DeliveryMan))]
+        public async Task<IHttpActionResult> PostDeliveryMan(DeliveryMan deliveryMan)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            IdentityResult result = await _repo.RegisterUser(salesman.UserName, salesman.Password);
-            db.Salesmen.Add(salesman);
+            IdentityResult result = await _repo.RegisterUser(deliveryMan.UserName, deliveryMan.Password);
+            db.DeliveryMen.Add(deliveryMan);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = salesman.Id }, salesman);
+            return CreatedAtRoute("DefaultApi", new { id = deliveryMan.Id }, deliveryMan);
         }
 
-        // DELETE: api/Salesmen/5
-        [ResponseType(typeof(Salesman))]
-        public async Task<IHttpActionResult> DeleteSalesman(int id)
+        // DELETE: api/DeliveryMen/5
+        [ResponseType(typeof(DeliveryMan))]
+        public async Task<IHttpActionResult> DeleteDeliveryMan(int id)
         {
-            Salesman salesman = await db.Salesmen.FindAsync(id);
-            if (salesman == null)
+            DeliveryMan deliveryMan = await db.DeliveryMen.FindAsync(id);
+            if (deliveryMan == null)
             {
                 return NotFound();
             }
 
-            db.Salesmen.Remove(salesman);
+            db.DeliveryMen.Remove(deliveryMan);
             await db.SaveChangesAsync();
 
-            return Ok(salesman);
+            return Ok(deliveryMan);
         }
 
         protected override void Dispose(bool disposing)
@@ -123,9 +120,9 @@ namespace DistriBotAPI.Controllers
             base.Dispose(disposing);
         }
 
-        private bool SalesmanExists(int id)
+        private bool DeliveryManExists(int id)
         {
-            return db.Salesmen.Count(e => e.Id == id) > 0;
+            return db.DeliveryMen.Count(e => e.Id == id) > 0;
         }
     }
 }

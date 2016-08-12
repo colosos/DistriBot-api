@@ -14,45 +14,44 @@ using DistriBotAPI.Models;
 
 namespace DistriBotAPI.Controllers
 {
-    public class ProductsController : ApiController
+    public class ClientsController : ApiController
     {
         private Context db = new Context();
 
-        [Authorize]
-        // GET: api/Products
-        public IQueryable<Product> GetProducts()
+        // GET: api/Clients
+        public IQueryable<Client> GetClients()
         {
-            return db.Products;
+            return db.Clients;
         }
 
-        // GET: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> GetProduct(int id)
+        // GET: api/Clients/5
+        [ResponseType(typeof(Client))]
+        public async Task<IHttpActionResult> GetClient(int id)
         {
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
+            Client client = await db.Clients.FindAsync(id);
+            if (client == null)
             {
                 return NotFound();
             }
 
-            return Ok(product);
+            return Ok(client);
         }
 
-        // PUT: api/Products/5
+        // PUT: api/Clients/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProduct(int id, Product product)
+        public async Task<IHttpActionResult> PutClient(int id, Client client)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != product.Id)
+            if (id != client.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(product).State = EntityState.Modified;
+            db.Entry(client).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +59,7 @@ namespace DistriBotAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(id))
+                if (!ClientExists(id))
                 {
                     return NotFound();
                 }
@@ -73,35 +72,35 @@ namespace DistriBotAPI.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Products
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> PostProduct(Product product)
+        // POST: api/Clients
+        [ResponseType(typeof(Client))]
+        public async Task<IHttpActionResult> PostClient(Client client)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Products.Add(product);
+            db.Clients.Add(client);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = product.Id }, product);
+            return CreatedAtRoute("DefaultApi", new { id = client.Id }, client);
         }
 
-        // DELETE: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> DeleteProduct(int id)
+        // DELETE: api/Clients/5
+        [ResponseType(typeof(Client))]
+        public async Task<IHttpActionResult> DeleteClient(int id)
         {
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
+            Client client = await db.Clients.FindAsync(id);
+            if (client == null)
             {
                 return NotFound();
             }
 
-            db.Products.Remove(product);
+            db.Clients.Remove(client);
             await db.SaveChangesAsync();
 
-            return Ok(product);
+            return Ok(client);
         }
 
         protected override void Dispose(bool disposing)
@@ -113,9 +112,9 @@ namespace DistriBotAPI.Controllers
             base.Dispose(disposing);
         }
 
-        private bool ProductExists(int id)
+        private bool ClientExists(int id)
         {
-            return db.Products.Count(e => e.Id == id) > 0;
+            return db.Clients.Count(e => e.Id == id) > 0;
         }
     }
 }
