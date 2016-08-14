@@ -202,10 +202,26 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Authentication\AuthRepository.cs" />
     <Compile Include="Contexts\Context.cs" />
+    <Compile Include="Controllers\ClientsController.cs" />
+    <Compile Include="Controllers\DeliveryMenController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\SalesmenController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Migrations\201608112343408_Products.cs" />
+    <Compile Include="Migrations\201608112343408_Products.Designer.cs">
+      <DependentUpon>201608112343408_Products.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608112357286_deliverymen.cs" />
+    <Compile Include="Migrations\201608112357286_deliverymen.Designer.cs">
+      <DependentUpon>201608112357286_deliverymen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608121228111_Clients.cs" />
+    <Compile Include="Migrations\201608121228111_Clients.Designer.cs">
+      <DependentUpon>201608121228111_Clients.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\DeliveryMan.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Salesman.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -215,13 +231,24 @@
   <ItemGroup>
     <Content Include="apiapp.json" />
     <None Include="Properties\PublishProfiles\DistriBotAPI%28distribotresourceplan%29 %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\DistriBotAPI%28DistriBotResourcePlan%29.pubxml" />
+    <None Include="Properties\PublishProfiles\DistriBotAPI%28DistriBotRG%29.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201608112343408_Products.resx">
+      <DependentUpon>201608112343408_Products.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608112357286_deliverymen.resx">
+      <DependentUpon>201608112357286_deliverymen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608121228111_Clients.resx">
+      <DependentUpon>201608121228111_Clients.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

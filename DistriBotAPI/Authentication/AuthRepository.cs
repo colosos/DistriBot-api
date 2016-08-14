@@ -22,17 +22,19 @@ namespace DistriBotAPI.Authentication
             _userManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>(_ctx));
         }
 
-        public async Task<IdentityResult> RegisterUser(Salesman salesman)
+        public async Task<IdentityResult> RegisterUser(string userName, string pass)
         {
             IdentityUser user = new IdentityUser
             {
-                UserName = salesman.UserName
+                UserName = userName
             };
 
-            var result = await _userManager.CreateAsync(user, salesman.Password);
+            var result = await _userManager.CreateAsync(user, pass);
 
             return result;
         }
+
+
 
         public async Task<IdentityUser> FindUser(string userName, string password)
         {

@@ -11,10 +11,12 @@ namespace DistriBotAPI.Contexts
     public class Context : IdentityDbContext<IdentityUser>
     {
         public DbSet<Salesman> Salesmen { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<DeliveryMan> DeliveryMen { get; set; }
+        public DbSet<Client> Clients { get; set; }
 
         public Context() : base("Context")
         {
         }
-
     }
 }
