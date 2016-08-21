@@ -121,7 +121,7 @@ namespace DistriBotAPI.Controllers
         // FIND THE CLIENT WHICH IS CLOSEST TO THE GIVEN COORDINATES
         [Route("api/Clients/nearest")]
         [ResponseType(typeof(Client))]
-        public async Task<IHttpActionResult> DetectClient([FromUri] double lat, double lon)
+        public async Task<IHttpActionResult> DetectClient([FromUri] double lat, [FromUri] double lon)
         {
             if (db.Clients.Count() == 0)
             {

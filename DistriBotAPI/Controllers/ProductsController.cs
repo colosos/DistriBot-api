@@ -21,11 +21,9 @@ namespace DistriBotAPI.Controllers
 
         // GET: api/Products
         [Authorize]
-        public IQueryable<Product> GetProducts()
+        public IQueryable<Product> GetProducts([FromUri] int desde, [FromUri] int cantidad)
         {
-            int desde = int.Parse(Request.Headers.GetValues("Desde").ElementAt(0));
-            int cant = int.Parse(Request.Headers.GetValues("Cantidad").ElementAt(0));
-            return db.Products.OrderBy(c => c.Id).Skip(desde - 1).Take(cant);
+            return db.Products.OrderBy(c => c.Id).Skip(desde - 1).Take(cantidad);
         }
 
         // GET: api/Products/5
