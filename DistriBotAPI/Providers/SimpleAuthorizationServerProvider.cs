@@ -1,5 +1,7 @@
 ﻿using DistriBotAPI.Authentication;
+using DistriBotAPI.Contexts;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ namespace DistriBotAPI.Providers
 {
     public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
+        private Context db = new Context();
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
             context.Validated();
@@ -36,9 +39,27 @@ namespace DistriBotAPI.Providers
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
             identity.AddClaim(new Claim("sub", context.UserName));
             identity.AddClaim(new Claim("role", "user"));
+            AuthenticationProperties properties = CreateProperties(Utilities.Roles.GetRole(context.UserName));
+            AuthenticationTicket ticket = new AuthenticationTicket(identity, properties);
+            context.Validated(ticket);
+        }
 
-            context.Validated(identity);
+        public override Task TokenEndpoint(OAuthTokenEndpointContext context)
+        {
+            foreach (KeyValuePair<string, string> property in context.Properties.Dictionary)
+            {
+                context.AdditionalResponseParameters.Add(property.Key, property.Value);
+            }
+            return Task.FromResult<object>(null);
+        }
 
+        public static AuthenticationProperties CreateProperties(string role)
+        {
+            IDictionary<string, string> data = new Dictionary<string, string>
+            {
+                { "role", role }
+            };
+            return new AuthenticationProperties(data);
         }
     }
 }

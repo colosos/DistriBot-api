@@ -11,51 +11,47 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
-using System.Web.Security;
 
 namespace DistriBotAPI.Controllers
 {
-    public class ProductsController : ApiController
+    public class DevolutionsController : ApiController
     {
         private Context db = new Context();
 
-        // GET: api/Products
-        [Authorize]
-        public IQueryable<Product> GetProducts()
+        // GET: api/Devolutions
+        public IQueryable<Devolution> GetDevolutions()
         {
-            int desde = int.Parse(Request.Headers.GetValues("Desde").ElementAt(0));
-            int cant = int.Parse(Request.Headers.GetValues("Cantidad").ElementAt(0));
-            return db.Products.OrderBy(c => c.Id).Skip(desde - 1).Take(cant);
+            return db.Devolutions;
         }
 
-        // GET: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> GetProduct(int id)
+        // GET: api/Devolutions/5
+        [ResponseType(typeof(Devolution))]
+        public async Task<IHttpActionResult> GetDevolution(int id)
         {
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
+            Devolution devolution = await db.Devolutions.FindAsync(id);
+            if (devolution == null)
             {
                 return NotFound();
             }
 
-            return Ok(product);
+            return Ok(devolution);
         }
 
-        // PUT: api/Products/5
+        // PUT: api/Devolutions/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProduct(int id, Product product)
+        public async Task<IHttpActionResult> PutDevolution(int id, Devolution devolution)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != product.Id)
+            if (id != devolution.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(product).State = EntityState.Modified;
+            db.Entry(devolution).State = EntityState.Modified;
 
             try
             {
@@ -63,7 +59,7 @@ namespace DistriBotAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(id))
+                if (!DevolutionExists(id))
                 {
                     return NotFound();
                 }
@@ -76,35 +72,35 @@ namespace DistriBotAPI.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Products
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> PostProduct(Product product)
+        // POST: api/Devolutions
+        [ResponseType(typeof(Devolution))]
+        public async Task<IHttpActionResult> PostDevolution(Devolution devolution)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Products.Add(product);
+            db.Devolutions.Add(devolution);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = product.Id }, product);
+            return CreatedAtRoute("DefaultApi", new { id = devolution.Id }, devolution);
         }
 
-        // DELETE: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> DeleteProduct(int id)
+        // DELETE: api/Devolutions/5
+        [ResponseType(typeof(Devolution))]
+        public async Task<IHttpActionResult> DeleteDevolution(int id)
         {
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
+            Devolution devolution = await db.Devolutions.FindAsync(id);
+            if (devolution == null)
             {
                 return NotFound();
             }
 
-            db.Products.Remove(product);
+            db.Devolutions.Remove(devolution);
             await db.SaveChangesAsync();
 
-            return Ok(product);
+            return Ok(devolution);
         }
 
         protected override void Dispose(bool disposing)
@@ -116,9 +112,9 @@ namespace DistriBotAPI.Controllers
             base.Dispose(disposing);
         }
 
-        private bool ProductExists(int id)
+        private bool DevolutionExists(int id)
         {
-            return db.Products.Count(e => e.Id == id) > 0;
+            return db.Devolutions.Count(e => e.Id == id) > 0;
         }
     }
 }

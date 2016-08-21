@@ -11,51 +11,47 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
-using System.Web.Security;
 
 namespace DistriBotAPI.Controllers
 {
-    public class ProductsController : ApiController
+    public class RoutesController : ApiController
     {
         private Context db = new Context();
 
-        // GET: api/Products
-        [Authorize]
-        public IQueryable<Product> GetProducts()
+        // GET: api/Routes
+        public IQueryable<Route> GetRoutes()
         {
-            int desde = int.Parse(Request.Headers.GetValues("Desde").ElementAt(0));
-            int cant = int.Parse(Request.Headers.GetValues("Cantidad").ElementAt(0));
-            return db.Products.OrderBy(c => c.Id).Skip(desde - 1).Take(cant);
+            return db.Routes;
         }
 
-        // GET: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> GetProduct(int id)
+        // GET: api/Routes/5
+        [ResponseType(typeof(Route))]
+        public async Task<IHttpActionResult> GetRoute(int id)
         {
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
+            Route route = await db.Routes.FindAsync(id);
+            if (route == null)
             {
                 return NotFound();
             }
 
-            return Ok(product);
+            return Ok(route);
         }
 
-        // PUT: api/Products/5
+        // PUT: api/Routes/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProduct(int id, Product product)
+        public async Task<IHttpActionResult> PutRoute(int id, Route route)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != product.Id)
+            if (id != route.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(product).State = EntityState.Modified;
+            db.Entry(route).State = EntityState.Modified;
 
             try
             {
@@ -63,7 +59,7 @@ namespace DistriBotAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(id))
+                if (!RouteExists(id))
                 {
                     return NotFound();
                 }
@@ -76,35 +72,35 @@ namespace DistriBotAPI.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Products
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> PostProduct(Product product)
+        // POST: api/Routes
+        [ResponseType(typeof(Route))]
+        public async Task<IHttpActionResult> PostRoute(Route route)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Products.Add(product);
+            db.Routes.Add(route);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = product.Id }, product);
+            return CreatedAtRoute("DefaultApi", new { id = route.Id }, route);
         }
 
-        // DELETE: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> DeleteProduct(int id)
+        // DELETE: api/Routes/5
+        [ResponseType(typeof(Route))]
+        public async Task<IHttpActionResult> DeleteRoute(int id)
         {
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
+            Route route = await db.Routes.FindAsync(id);
+            if (route == null)
             {
                 return NotFound();
             }
 
-            db.Products.Remove(product);
+            db.Routes.Remove(route);
             await db.SaveChangesAsync();
 
-            return Ok(product);
+            return Ok(route);
         }
 
         protected override void Dispose(bool disposing)
@@ -116,9 +112,9 @@ namespace DistriBotAPI.Controllers
             base.Dispose(disposing);
         }
 
-        private bool ProductExists(int id)
+        private bool RouteExists(int id)
         {
-            return db.Products.Count(e => e.Id == id) > 0;
+            return db.Routes.Count(e => e.Id == id) > 0;
         }
     }
 }

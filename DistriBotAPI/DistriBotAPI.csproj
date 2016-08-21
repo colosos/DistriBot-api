@@ -168,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Authentication\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="WebActivatorEx">
@@ -200,12 +201,17 @@
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Authentication\AuthRepository.cs" />
+    <Compile Include="Contexts\AuthRepository.cs" />
     <Compile Include="Contexts\Context.cs" />
+    <Compile Include="Controllers\BaseProductsController.cs" />
     <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\DeliveryMenController.cs" />
+    <Compile Include="Controllers\DevolutionsController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Controllers\RoutesController.cs" />
     <Compile Include="Controllers\SalesmenController.cs" />
+    <Compile Include="Controllers\TagsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Migrations\201608112343408_Products.cs" />
     <Compile Include="Migrations\201608112343408_Products.Designer.cs">
@@ -219,14 +225,49 @@
     <Compile Include="Migrations\201608121228111_Clients.Designer.cs">
       <DependentUpon>201608121228111_Clients.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608122338538_location.cs" />
+    <Compile Include="Migrations\201608122338538_location.Designer.cs">
+      <DependentUpon>201608122338538_location.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608130001273_location2.cs" />
+    <Compile Include="Migrations\201608130001273_location2.Designer.cs">
+      <DependentUpon>201608130001273_location2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608172328398_sprint2.cs" />
+    <Compile Include="Migrations\201608172328398_sprint2.Designer.cs">
+      <DependentUpon>201608172328398_sprint2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608192248539_cambio1.cs" />
+    <Compile Include="Migrations\201608192248539_cambio1.Designer.cs">
+      <DependentUpon>201608192248539_cambio1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608201917566_m1.cs" />
+    <Compile Include="Migrations\201608201917566_m1.Designer.cs">
+      <DependentUpon>201608201917566_m1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608202303028_m2.cs" />
+    <Compile Include="Migrations\201608202303028_m2.Designer.cs">
+      <DependentUpon>201608202303028_m2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608211431123_m3.cs" />
+    <Compile Include="Migrations\201608211431123_m3.Designer.cs">
+      <DependentUpon>201608211431123_m3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\BaseProduct.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\DeliveryMan.cs" />
+    <Compile Include="Models\Devolution.cs" />
+    <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Route.cs" />
     <Compile Include="Models\Salesman.cs" />
+    <Compile Include="Models\Tag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\Location.cs" />
+    <Compile Include="Utilities\Roles.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="apiapp.json" />
@@ -242,12 +283,35 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201608112343408_Products.resx">
       <DependentUpon>201608112343408_Products.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608112357286_deliverymen.resx">
       <DependentUpon>201608112357286_deliverymen.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608121228111_Clients.resx">
       <DependentUpon>201608121228111_Clients.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608122338538_location.resx">
+      <DependentUpon>201608122338538_location.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608130001273_location2.resx">
+      <DependentUpon>201608130001273_location2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608172328398_sprint2.resx">
+      <DependentUpon>201608172328398_sprint2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608192248539_cambio1.resx">
+      <DependentUpon>201608192248539_cambio1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608201917566_m1.resx">
+      <DependentUpon>201608201917566_m1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608202303028_m2.resx">
+      <DependentUpon>201608202303028_m2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608211431123_m3.resx">
+      <DependentUpon>201608211431123_m3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

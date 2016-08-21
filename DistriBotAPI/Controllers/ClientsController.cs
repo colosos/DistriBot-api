@@ -11,6 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
+using DistriBotAPI.Utilities;
 
 namespace DistriBotAPI.Controllers
 {
@@ -115,6 +116,29 @@ namespace DistriBotAPI.Controllers
         private bool ClientExists(int id)
         {
             return db.Clients.Count(e => e.Id == id) > 0;
+        }
+
+        // FIND THE CLIENT WHICH IS CLOSEST TO THE GIVEN COORDINATES
+        [Route("api/Clients/nearest")]
+        [ResponseType(typeof(Client))]
+        public async Task<IHttpActionResult> DetectClient([FromUri] double lat, double lon)
+        {
+            if (db.Clients.Count() == 0)
+            {
+                return BadRequest();
+            }
+            double minDist = Double.MaxValue;
+            Client closestClient = null;
+            foreach (Client aux in GetClients())
+            {
+                double dist = Location.Distance(lat, lon, aux.Latitude, aux.Longitude);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    closestClient = aux;
+                }
+            }
+            return Ok(closestClient);
         }
     }
 }

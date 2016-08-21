@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Security;
 
 namespace DistriBotAPI.Authentication
 {
@@ -28,7 +29,6 @@ namespace DistriBotAPI.Authentication
             {
                 UserName = userName
             };
-
             var result = await _userManager.CreateAsync(user, pass);
 
             return result;
