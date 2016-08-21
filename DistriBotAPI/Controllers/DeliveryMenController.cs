@@ -13,6 +13,7 @@ using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
 using Microsoft.AspNet.Identity;
 using DistriBotAPI.Authentication;
+using System.Web.Security;
 
 namespace DistriBotAPI.Controllers
 {

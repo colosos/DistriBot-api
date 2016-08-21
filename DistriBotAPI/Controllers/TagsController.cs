@@ -11,49 +11,47 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
-using System.Web.Security;
 
 namespace DistriBotAPI.Controllers
 {
-    public class ProductsController : ApiController
+    public class TagsController : ApiController
     {
         private Context db = new Context();
 
-        // GET: api/Products
-        [Authorize]
-        public IQueryable<Product> GetProducts([FromUri] int desde, [FromUri] int cantidad)
+        // GET: api/Tags
+        public IQueryable<Tag> GetTags()
         {
-            return db.Products.OrderBy(c => c.Id).Skip(desde - 1).Take(cantidad);
+            return db.Tags;
         }
 
-        // GET: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> GetProduct(int id)
+        // GET: api/Tags/5
+        [ResponseType(typeof(Tag))]
+        public async Task<IHttpActionResult> GetTag(int id)
         {
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
+            Tag tag = await db.Tags.FindAsync(id);
+            if (tag == null)
             {
                 return NotFound();
             }
 
-            return Ok(product);
+            return Ok(tag);
         }
 
-        // PUT: api/Products/5
+        // PUT: api/Tags/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProduct(int id, Product product)
+        public async Task<IHttpActionResult> PutTag(int id, Tag tag)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != product.Id)
+            if (id != tag.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(product).State = EntityState.Modified;
+            db.Entry(tag).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +59,7 @@ namespace DistriBotAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(id))
+                if (!TagExists(id))
                 {
                     return NotFound();
                 }
@@ -74,35 +72,35 @@ namespace DistriBotAPI.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Products
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> PostProduct(Product product)
+        // POST: api/Tags
+        [ResponseType(typeof(Tag))]
+        public async Task<IHttpActionResult> PostTag(Tag tag)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Products.Add(product);
+            db.Tags.Add(tag);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = product.Id }, product);
+            return CreatedAtRoute("DefaultApi", new { id = tag.Id }, tag);
         }
 
-        // DELETE: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> DeleteProduct(int id)
+        // DELETE: api/Tags/5
+        [ResponseType(typeof(Tag))]
+        public async Task<IHttpActionResult> DeleteTag(int id)
         {
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
+            Tag tag = await db.Tags.FindAsync(id);
+            if (tag == null)
             {
                 return NotFound();
             }
 
-            db.Products.Remove(product);
+            db.Tags.Remove(tag);
             await db.SaveChangesAsync();
 
-            return Ok(product);
+            return Ok(tag);
         }
 
         protected override void Dispose(bool disposing)
@@ -114,9 +112,9 @@ namespace DistriBotAPI.Controllers
             base.Dispose(disposing);
         }
 
-        private bool ProductExists(int id)
+        private bool TagExists(int id)
         {
-            return db.Products.Count(e => e.Id == id) > 0;
+            return db.Tags.Count(e => e.Id == id) > 0;
         }
     }
 }

@@ -11,49 +11,47 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
-using System.Web.Security;
 
 namespace DistriBotAPI.Controllers
 {
-    public class ProductsController : ApiController
+    public class OrdersController : ApiController
     {
         private Context db = new Context();
 
-        // GET: api/Products
-        [Authorize]
-        public IQueryable<Product> GetProducts([FromUri] int desde, [FromUri] int cantidad)
+        // GET: api/Orders
+        public IQueryable<Order> GetOrders()
         {
-            return db.Products.OrderBy(c => c.Id).Skip(desde - 1).Take(cantidad);
+            return db.Orders;
         }
 
-        // GET: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> GetProduct(int id)
+        // GET: api/Orders/5
+        [ResponseType(typeof(Order))]
+        public async Task<IHttpActionResult> GetOrder(int id)
         {
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
+            Order order = await db.Orders.FindAsync(id);
+            if (order == null)
             {
                 return NotFound();
             }
 
-            return Ok(product);
+            return Ok(order);
         }
 
-        // PUT: api/Products/5
+        // PUT: api/Orders/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProduct(int id, Product product)
+        public async Task<IHttpActionResult> PutOrder(int id, Order order)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != product.Id)
+            if (id != order.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(product).State = EntityState.Modified;
+            db.Entry(order).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +59,7 @@ namespace DistriBotAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(id))
+                if (!OrderExists(id))
                 {
                     return NotFound();
                 }
@@ -74,35 +72,35 @@ namespace DistriBotAPI.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Products
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> PostProduct(Product product)
+        // POST: api/Orders
+        [ResponseType(typeof(Order))]
+        public async Task<IHttpActionResult> PostOrder(Order order)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Products.Add(product);
+            db.Orders.Add(order);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = product.Id }, product);
+            return CreatedAtRoute("DefaultApi", new { id = order.Id }, order);
         }
 
-        // DELETE: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> DeleteProduct(int id)
+        // DELETE: api/Orders/5
+        [ResponseType(typeof(Order))]
+        public async Task<IHttpActionResult> DeleteOrder(int id)
         {
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
+            Order order = await db.Orders.FindAsync(id);
+            if (order == null)
             {
                 return NotFound();
             }
 
-            db.Products.Remove(product);
+            db.Orders.Remove(order);
             await db.SaveChangesAsync();
 
-            return Ok(product);
+            return Ok(order);
         }
 
         protected override void Dispose(bool disposing)
@@ -114,9 +112,9 @@ namespace DistriBotAPI.Controllers
             base.Dispose(disposing);
         }
 
-        private bool ProductExists(int id)
+        private bool OrderExists(int id)
         {
-            return db.Products.Count(e => e.Id == id) > 0;
+            return db.Orders.Count(e => e.Id == id) > 0;
         }
     }
 }

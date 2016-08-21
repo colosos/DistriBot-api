@@ -11,49 +11,47 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
-using System.Web.Security;
 
 namespace DistriBotAPI.Controllers
 {
-    public class ProductsController : ApiController
+    public class BaseProductsController : ApiController
     {
         private Context db = new Context();
 
-        // GET: api/Products
-        [Authorize]
-        public IQueryable<Product> GetProducts([FromUri] int desde, [FromUri] int cantidad)
+        // GET: api/BaseProducts
+        public IQueryable<BaseProduct> GetBaseProducts()
         {
-            return db.Products.OrderBy(c => c.Id).Skip(desde - 1).Take(cantidad);
+            return db.BaseProducts;
         }
 
-        // GET: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> GetProduct(int id)
+        // GET: api/BaseProducts/5
+        [ResponseType(typeof(BaseProduct))]
+        public async Task<IHttpActionResult> GetBaseProduct(int id)
         {
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
+            BaseProduct baseProduct = await db.BaseProducts.FindAsync(id);
+            if (baseProduct == null)
             {
                 return NotFound();
             }
 
-            return Ok(product);
+            return Ok(baseProduct);
         }
 
-        // PUT: api/Products/5
+        // PUT: api/BaseProducts/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProduct(int id, Product product)
+        public async Task<IHttpActionResult> PutBaseProduct(int id, BaseProduct baseProduct)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != product.Id)
+            if (id != baseProduct.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(product).State = EntityState.Modified;
+            db.Entry(baseProduct).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +59,7 @@ namespace DistriBotAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(id))
+                if (!BaseProductExists(id))
                 {
                     return NotFound();
                 }
@@ -74,35 +72,35 @@ namespace DistriBotAPI.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Products
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> PostProduct(Product product)
+        // POST: api/BaseProducts
+        [ResponseType(typeof(BaseProduct))]
+        public async Task<IHttpActionResult> PostBaseProduct(BaseProduct baseProduct)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Products.Add(product);
+            db.BaseProducts.Add(baseProduct);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = product.Id }, product);
+            return CreatedAtRoute("DefaultApi", new { id = baseProduct.Id }, baseProduct);
         }
 
-        // DELETE: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> DeleteProduct(int id)
+        // DELETE: api/BaseProducts/5
+        [ResponseType(typeof(BaseProduct))]
+        public async Task<IHttpActionResult> DeleteBaseProduct(int id)
         {
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
+            BaseProduct baseProduct = await db.BaseProducts.FindAsync(id);
+            if (baseProduct == null)
             {
                 return NotFound();
             }
 
-            db.Products.Remove(product);
+            db.BaseProducts.Remove(baseProduct);
             await db.SaveChangesAsync();
 
-            return Ok(product);
+            return Ok(baseProduct);
         }
 
         protected override void Dispose(bool disposing)
@@ -114,9 +112,9 @@ namespace DistriBotAPI.Controllers
             base.Dispose(disposing);
         }
 
-        private bool ProductExists(int id)
+        private bool BaseProductExists(int id)
         {
-            return db.Products.Count(e => e.Id == id) > 0;
+            return db.BaseProducts.Count(e => e.Id == id) > 0;
         }
     }
 }

@@ -15,6 +15,14 @@ namespace DistriBotAPI.Models
 
         public double Longitude { get; set; }
 
+        public string Address { get; set; }
+
+        public string Phone { get; set; }
+ 
+        public string EmailAddress { get; set; }
+
+        public double CreditBalance { get; set; }
+
         public Client()
         {
 
