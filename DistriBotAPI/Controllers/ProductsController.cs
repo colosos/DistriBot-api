@@ -19,7 +19,7 @@ namespace DistriBotAPI.Controllers
     {
         private Context db = new Context();
 
-        // GET: api/Products
+        //GET: api/Products
         [Authorize]
         public IQueryable<Product> GetProducts([FromUri] int desde, [FromUri] int cantidad)
         {

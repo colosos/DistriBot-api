@@ -16,6 +16,8 @@ namespace DistriBotAPI.Utilities
                 return "deliverymen";
             if (IsSalesmen(userName))
                 return "salesmen";
+            if (IsSupervisor(userName))
+                return "supervisor";
             //Returns "none" allows a new user to be added to the DB as there is no user 
             //with that username
             return "none";
@@ -29,6 +31,11 @@ namespace DistriBotAPI.Utilities
         public static bool IsSalesmen(string userName)
         {
             return db.Salesmen.Where(sm => sm.UserName.Equals(userName)).Count() > 0;
+        }
+
+        public static bool IsSupervisor(string userName)
+        {
+            return db.Supervisors.Where(sv => sv.UserName.Equals(userName)).Count() > 0;
         }
     }
 }

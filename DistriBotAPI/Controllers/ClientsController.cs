@@ -12,17 +12,22 @@ using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
 using DistriBotAPI.Utilities;
+using DistriBotAPI.Interfaces;
+using Implementation;
 
 namespace DistriBotAPI.Controllers
 {
     public class ClientsController : ApiController
     {
         private Context db = new Context();
+        private Implementation.IFinance finance = (Implementation.IFinance) new FinanceImp();
 
         // GET: api/Clients
-        public IQueryable<Client> GetClients()
+        [Authorize]
+        public IQueryable<Client> GetClients([FromUri] int desde, [FromUri] int cantidad)
         {
-            return db.Clients;
+            if (cantidad == 0) return db.Clients.OrderBy(c => c.Id).Skip(desde - 1);
+            return db.Clients.OrderBy(c => c.Id).Skip(desde - 1).Take(cantidad);
         }
 
         // GET: api/Clients/5
@@ -120,6 +125,7 @@ namespace DistriBotAPI.Controllers
 
         // FIND THE CLIENT WHICH IS CLOSEST TO THE GIVEN COORDINATES
         [Route("api/Clients/nearest")]
+        [HttpGet]
         [ResponseType(typeof(Client))]
         public async Task<IHttpActionResult> DetectClient([FromUri] double lat, [FromUri] double lon)
         {
@@ -129,7 +135,7 @@ namespace DistriBotAPI.Controllers
             }
             double minDist = Double.MaxValue;
             Client closestClient = null;
-            foreach (Client aux in GetClients())
+            foreach (Client aux in GetClients(1,0))
             {
                 double dist = Location.Distance(lat, lon, aux.Latitude, aux.Longitude);
                 if (dist < minDist)
@@ -139,6 +145,14 @@ namespace DistriBotAPI.Controllers
                 }
             }
             return Ok(closestClient);
+        }
+
+        // RETURNS THE FINAL BALANCE OF A GIVEN CLIENT
+        [Route("api/Clients/balance")]
+        public async Task<IHttpActionResult> GetBalance([FromUri] int cliId)
+        {
+            int balance = finance.ReturnBalance(cliId, DateTime.Now);      
+            return Ok(balance);
         }
     }
 }

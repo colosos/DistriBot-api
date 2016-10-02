@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 
 namespace DistriBotAPI.Models
 {
-    public enum SaleUnit { KG, Quantity };
     public class Product
     {
         public int Id { get; set; }
@@ -15,8 +15,9 @@ namespace DistriBotAPI.Models
         public string Description { get; set; }
 
         public double Price { get; set; }
-
-        public SaleUnit Unit { get; set; }
+        
+        [DefaultValue("KG")]
+        public string Unit { get; set; }
 
         public double UnitQuantity { get; set; }
 

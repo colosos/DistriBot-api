@@ -15,9 +15,11 @@ namespace DistriBotAPI.Models
 
         public DateTime DeliveredDate { get; set; }
 
-        public List<Tuple<Product, int>> ProductsList { get; set; }
+        public List<Item> ProductsList { get; set; }
 
         public double Price { get; set; }
+
+        public Salesman Salesman { get; set; }
 
         public Order()
         {
