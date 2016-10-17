@@ -18,5 +18,12 @@ namespace DistriBotAPI.Models
         public BaseProduct()
         {
         }
+
+        public BaseProduct(string nmb, string dsc, List<Tag> tags)
+        {
+            Name = nmb;
+            Description = dsc;
+            Tags = tags;
+        }
     }
 }

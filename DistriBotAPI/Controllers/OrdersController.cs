@@ -21,9 +21,31 @@ namespace DistriBotAPI.Controllers
         private Implementation.IFacturation billing = (Implementation.IFacturation) new FacturationImp();
 
         // GET: api/Orders
-        public IQueryable<Order> GetOrders()
+        //[Authorize]
+        [Route("api/Orders")]
+        public IQueryable<Order> GetOrders([FromUri] int desde, [FromUri] int cantidad)
         {
-            return db.Orders;
+            if (cantidad == 0) return db.Orders.OrderBy(c => c.Id).Skip(desde - 1);
+            return db.Orders.OrderBy(c => c.Id).Skip(desde - 1).Take(cantidad);
+        }
+
+        //[Authorize]
+        [Route("api/missingOrders")]
+        public IQueryable<Order> GetUndeliveredOrders()
+        {
+            return db.Orders.Where(o=>o.DeliveredDate == null).Include("Client").Include("Salesman");
+        }
+
+        //[Authorize]
+        [Route("api/deliverOrder")]
+        [HttpPost]
+        public async Task<IHttpActionResult> SetDeliveredFlag([FromUri] int idOrder, [FromUri] bool flag)
+        {
+            Order oldOrder = await db.Orders.Where(o => o.Id == idOrder).FirstAsync();
+            if (flag) oldOrder.DeliveredDate = DateTime.Now;
+            else oldOrder.DeliveredDate = null;
+            db.SaveChanges();
+            return Ok();
         }
 
         // GET: api/Orders/5
@@ -34,6 +56,7 @@ namespace DistriBotAPI.Controllers
                 .Include("Client")
                 .Include("ProductsList")
                 .Include("ProductsList.Product")
+                .Include("Salesman")
                 .Include("ProductsList.Product.BaseProduct").FirstAsync();
             if (order == null)
             {
@@ -88,7 +111,7 @@ namespace DistriBotAPI.Controllers
                 }
             }
 
-            // Delete subFoos from database that are not in the newFoo.SubFoo collection
+            // Delete\from database that are not in the newFoo.SubFoo collection
             List<Item> borrarAux = new List<Item>();
             foreach (var dbItems in oldOrder.ProductsList)
                 if (!order.ProductsList.Any(s => s.Id == dbItems.Id))
@@ -153,7 +176,9 @@ namespace DistriBotAPI.Controllers
         }
 
         // POST: api/Orders
-        [ResponseType(typeof(Order))]
+        //[ResponseType(typeof(Order))]
+        [Route("api/Orders")]
+        [HttpPost]
         public async Task<IHttpActionResult> PostOrder(Order order)
         {
             if (!ModelState.IsValid)
@@ -161,22 +186,32 @@ namespace DistriBotAPI.Controllers
                 return BadRequest(ModelState);
             }
             order.Client = db.Clients.Find(order.Client.Id);
+            int idSalesman = -1;
+            foreach (Salesman s in db.Salesmen)
+            {
+                if (s.UserName.Equals(order.Salesman.UserName))
+                {
+                    idSalesman = s.Id;
+                    break;
+                }
+            }
+            order.Salesman = db.Salesmen.Find(idSalesman);
             order.CreationDate = DateTime.Now;
             order.DeliveredDate = DateTime.Now;
-            double price = 0;
+            //double price = 0;
             foreach (Item i in order.ProductsList)
             {
                 i.Product = db.Products.Find(i.Product.Id);
-                price += i.Quantity * i.Product.Price;
+                //price += i.Quantity * i.Product.Price;
             }
-            double porcDif = (order.Price - price)/price*100;
-            if (porcDif < 10)
-            {
+            //double porcDif = (order.Price - price)/price*100;
+            //if (porcDif < 10)
+            //{
                 db.Orders.Add(order);
                 await db.SaveChangesAsync();
-            }
-
-            return CreatedAtRoute("DefaultApi", new { id = order.Id }, order);
+            //}
+            return Ok();
+            //return CreatedAtRoute("DefaultApi", new { id = order.Id }, order);
         }
 
         // DELETE: api/Orders/5

@@ -17,6 +17,11 @@ namespace DistriBotAPI.Models
         {
 
         }
+        public Item(int qty, Product prod)
+        {
+            Quantity = qty;
+            Product = prod;
+        }
 
     }
 }

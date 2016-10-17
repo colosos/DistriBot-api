@@ -89,11 +89,16 @@ namespace DistriBotAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            IdentityResult result = await _repo.RegisterUser(deliveryMan.UserName, deliveryMan.Password);
-            db.DeliveryMen.Add(deliveryMan);
-            await db.SaveChangesAsync();
+            if (Utilities.Roles.GetRole(deliveryMan.UserName).Equals("none"))
+            {
+                IdentityResult result = await _repo.RegisterUser(deliveryMan.UserName, deliveryMan.Password);
+                db.DeliveryMen.Add(deliveryMan);
+                await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = deliveryMan.Id }, deliveryMan);
+                return CreatedAtRoute("DefaultApi", new { id = deliveryMan.Id }, deliveryMan);
+            }
+            else
+                return BadRequest();
         }
 
         // DELETE: api/DeliveryMen/5

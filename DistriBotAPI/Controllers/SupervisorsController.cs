@@ -13,6 +13,7 @@ using System.Web.Http.Description;
 
 namespace DistriBotAPI.Controllers
 {
+   // [Route("api/Supervisors")]
     public class SupervisorsController : ApiController
     {
         private Context db = new Context();
@@ -40,7 +41,6 @@ namespace DistriBotAPI.Controllers
 
         // POST: api/Supervisors
         [ResponseType(typeof(Supervisor))]
-        [Route("api/Supervisors")]
         public async Task<IHttpActionResult> PostSupervisor(Supervisor supervisor)
         {
             if (!ModelState.IsValid)

@@ -15,7 +15,12 @@ namespace Implementation
 
         public int ReturnBalance(int CliId, DateTime Date)
         {
-            return 1000;
+            Random random = new Random();
+            double randomNumber = random.NextDouble();
+            randomNumber *= 2000;
+            randomNumber -= 1000;
+            return (int)randomNumber;
         }
+
     }
 }

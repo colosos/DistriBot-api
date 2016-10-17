@@ -173,8 +173,8 @@
       <HintPath>..\packages\System.Spatial.5.6.4\lib\net40\System.Spatial.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Cors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
+    <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
@@ -186,6 +186,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Http.Owin, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
       <Private>True</Private>
@@ -238,18 +242,37 @@
     <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\DeliveryMenController.cs" />
     <Compile Include="Controllers\DevolutionsController.cs" />
+    <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\RoutesController.cs" />
     <Compile Include="Controllers\SalesmenController.cs" />
     <Compile Include="Controllers\SupervisorsController.cs" />
     <Compile Include="Controllers\TagsController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="DataAccess\CRUDClients.cs" />
+    <Compile Include="DataAccess\CRUDDeliveryMen.cs" />
+    <Compile Include="DataAccess\CRUDDevolutions.cs" />
+    <Compile Include="DataAccess\CRUDItems.cs" />
+    <Compile Include="DataAccess\CRUDOrders.cs" />
+    <Compile Include="DataAccess\CRUDProducts.cs" />
+    <Compile Include="DataAccess\CRUDRoutes.cs" />
+    <Compile Include="DataAccess\CRUDSalesmen.cs" />
+    <Compile Include="DataAccess\CRUDSupervisors.cs" />
+    <Compile Include="DataAccess\CRUDTags.cs" />
+    <Compile Include="Data\Carritos.cs" />
+    <Compile Include="Data\Clientes.cs" />
+    <Compile Include="Data\Usuarios.cs" />
     <Compile Include="Interfaces\IFacturation.cs" />
     <Compile Include="Interfaces\IFinance.cs" />
     <Compile Include="Migrations\201610021642453_m1.cs" />
     <Compile Include="Migrations\201610021642453_m1.Designer.cs">
       <DependentUpon>201610021642453_m1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610140317380_mmm1.cs" />
+    <Compile Include="Migrations\201610140317380_mmm1.Designer.cs">
+      <DependentUpon>201610140317380_mmm1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseProduct.cs" />
@@ -266,6 +289,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Data\Data.cs" />
     <Compile Include="Utilities\Images.cs" />
     <Compile Include="Utilities\Location.cs" />
     <Compile Include="Utilities\Roles.cs" />
@@ -292,6 +316,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201610021642453_m1.resx">
       <DependentUpon>201610021642453_m1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610140317380_mmm1.resx">
+      <DependentUpon>201610140317380_mmm1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

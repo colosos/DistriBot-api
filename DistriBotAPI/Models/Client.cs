@@ -27,5 +27,16 @@ namespace DistriBotAPI.Models
         {
 
         }
+
+        public Client(string nmb, double lat, double lon, string dir, string tel, string mail, double creditoB)
+        {
+            Name = nmb;
+            Latitude = lat;
+            Longitude = lon;
+            Address = dir;
+            Phone = tel;
+            EmailAddress = mail;
+            CreditBalance = creditoB;
+        }
     }
 }

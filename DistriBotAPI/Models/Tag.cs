@@ -14,5 +14,10 @@ namespace DistriBotAPI.Models
         public Tag()
         {
         }
+
+        public Tag(string nmb)
+        {
+            Name = nmb;
+        }
     }
 }

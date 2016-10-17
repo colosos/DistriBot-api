@@ -13,7 +13,7 @@ namespace DistriBotAPI.Models
 
         public DateTime CreationDate { get; set; }
 
-        public DateTime DeliveredDate { get; set; }
+        public DateTime? DeliveredDate { get; set; }
 
         public List<Item> ProductsList { get; set; }
 
@@ -24,6 +24,16 @@ namespace DistriBotAPI.Models
         public Order()
         {
 
+        }
+
+        public Order(Client cli, DateTime creationDate, DateTime deliverDate, List<Item> prodsList, double price, Salesman vend)
+        {
+            Client = cli;
+            CreationDate = creationDate;
+            DeliveredDate = deliverDate;
+            ProductsList = prodsList;
+            Price = price;
+            Salesman = vend;
         }
     }
 }

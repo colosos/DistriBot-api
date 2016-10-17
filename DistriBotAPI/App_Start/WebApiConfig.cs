@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace DistriBotAPI
 {
@@ -13,12 +14,17 @@ namespace DistriBotAPI
         {
             // Configuración y servicios de Web API
 
+            // Allow CORS for all origins. (Caution!)
+            //var cors = new EnableCorsAttribute("*", "*", "*");
+            //config.EnableCors(cors);
+
             // Rutas de Web API
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
+                //routeTemplate: "api",
                 defaults: new { id = RouteParameter.Optional }
             );
 

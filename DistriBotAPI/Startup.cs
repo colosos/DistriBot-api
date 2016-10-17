@@ -19,7 +19,7 @@ namespace DistriBotAPI
             ConfigureOAuth(app);
             HttpConfiguration config = new HttpConfiguration();
             WebApiConfig.Register(config);
-            app.UseCors(CorsOptions.AllowAll);
+           //app.UseCors(CorsOptions.AllowAll);
             app.UseWebApi(config);
         }
 
