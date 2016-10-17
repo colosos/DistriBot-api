@@ -15,11 +15,19 @@ namespace DistriBotAPI.Models
 
         public DateTime DevolutionDate { get; set; }
 
-        public List<Tuple<Product, int>> ProductsList { get; set; }
+        public List<Item> ProductsList { get; set; }
 
         public Devolution()
         {
 
+        }
+
+        public Devolution(Client cli, DateTime reqDate, DateTime devDate, List<Item> prodsList)
+        {
+            Client = cli;
+            RequestDate = reqDate;
+            DevolutionDate = devDate;
+            ProductsList = prodsList;
         }
     }
 }

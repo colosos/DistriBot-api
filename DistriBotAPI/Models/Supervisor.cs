@@ -6,7 +6,7 @@ using System.Web;
 
 namespace DistriBotAPI.Models
 {
-    public class Salesman
+    public class Supervisor
     {
         public int Id { get; set; }
 
@@ -20,12 +20,12 @@ namespace DistriBotAPI.Models
         [NotMapped]
         public string ConfirmPassword { get; set; }
 
-        public Salesman()
+        public Supervisor()
         {
 
         }
 
-        public Salesman(string nmb, string user, string pass, string confPass)
+        public Supervisor(string nmb, string user, string pass, string confPass)
         {
             Name = nmb;
             UserName = user;

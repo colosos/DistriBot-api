@@ -24,5 +24,13 @@ namespace DistriBotAPI.Models
         {
 
         }
+
+        public DeliveryMan(string nmb, string user, string pass, string confPass)
+        {
+            Name = nmb;
+            UserName = user;
+            Password = pass;
+            ConfirmPassword = confPass;
+        }
     }
 }

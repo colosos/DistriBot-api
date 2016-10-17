@@ -19,5 +19,11 @@ namespace DistriBotAPI.Models
         {
 
         }
+        public Route(string dsc, DeliveryMan driver, List<Client> clis)
+        {
+            Description = dsc;
+            Driver = driver;
+            Clients = clis;
+        }
     }
 }

@@ -12,24 +12,31 @@ using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
 using DistriBotAPI.Utilities;
+using DistriBotAPI.Interfaces;
+using Implementation;
+using DistriBotAPI.DataAccess;
 
 namespace DistriBotAPI.Controllers
 {
     public class ClientsController : ApiController
     {
-        private Context db = new Context();
+        //private Context db = new Context();
+        private CRUDClients cc = new CRUDClients();
+        private Implementation.IFinance finance = (Implementation.IFinance) new FinanceImp();
 
         // GET: api/Clients
-        public IQueryable<Client> GetClients()
+        //[Authorize]
+        public IQueryable<Client> GetClients([FromUri] int desde, [FromUri] int cantidad)
         {
-            return db.Clients;
+            if (cantidad == 0) return cc.GetClients().OrderBy(c => c.Id).Skip(desde - 1);
+            return cc.GetClients().OrderBy(c => c.Id).Skip(desde - 1).Take(cantidad);
         }
 
         // GET: api/Clients/5
         [ResponseType(typeof(Client))]
         public async Task<IHttpActionResult> GetClient(int id)
         {
-            Client client = await db.Clients.FindAsync(id);
+            Client client = cc.GetClient(id);
             if (client == null)
             {
                 return NotFound();
@@ -51,40 +58,37 @@ namespace DistriBotAPI.Controllers
             {
                 return BadRequest();
             }
+            cc.UpdateClient(client);
+            //db.Entry(client).State = EntityState.Modified;
 
-            db.Entry(client).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ClientExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            //try
+            //{
+            //    await db.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!ClientExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
 
             return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST: api/Clients
-        [ResponseType(typeof(Client))]
+        [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PostClient(Client client)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            db.Clients.Add(client);
-            await db.SaveChangesAsync();
-
+            cc.CreateClient(client);
             return CreatedAtRoute("DefaultApi", new { id = client.Id }, client);
         }
 
@@ -92,44 +96,42 @@ namespace DistriBotAPI.Controllers
         [ResponseType(typeof(Client))]
         public async Task<IHttpActionResult> DeleteClient(int id)
         {
-            Client client = await db.Clients.FindAsync(id);
+            Client client = cc.GetClient(id);
             if (client == null)
             {
                 return NotFound();
             }
-
-            db.Clients.Remove(client);
-            await db.SaveChangesAsync();
-
-            return Ok(client);
+            cc.DeleteClient(client);
+            return Ok();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                //db.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool ClientExists(int id)
         {
-            return db.Clients.Count(e => e.Id == id) > 0;
+            return cc.GetClients().Count(e => e.Id == id) > 0;
         }
 
         // FIND THE CLIENT WHICH IS CLOSEST TO THE GIVEN COORDINATES
         [Route("api/Clients/nearest")]
+        [HttpGet]
         [ResponseType(typeof(Client))]
         public async Task<IHttpActionResult> DetectClient([FromUri] double lat, [FromUri] double lon)
         {
-            if (db.Clients.Count() == 0)
+            if (cc.GetClients().Count() == 0)
             {
                 return BadRequest();
             }
             double minDist = Double.MaxValue;
             Client closestClient = null;
-            foreach (Client aux in GetClients())
+            foreach (Client aux in GetClients(1,0))
             {
                 double dist = Location.Distance(lat, lon, aux.Latitude, aux.Longitude);
                 if (dist < minDist)
@@ -139,6 +141,14 @@ namespace DistriBotAPI.Controllers
                 }
             }
             return Ok(closestClient);
+        }
+
+        // RETURNS THE FINAL BALANCE OF A GIVEN CLIENT
+        [Route("api/Clients/balance")]
+        public async Task<IHttpActionResult> GetBalance([FromUri] int cliId)
+        {
+            int balance = finance.ReturnBalance(cliId, DateTime.Now);      
+            return Ok(balance);
         }
     }
 }

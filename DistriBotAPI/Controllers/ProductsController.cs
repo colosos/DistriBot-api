@@ -19,8 +19,8 @@ namespace DistriBotAPI.Controllers
     {
         private Context db = new Context();
 
-        // GET: api/Products
-        [Authorize]
+        //GET: api/Products
+       // [Authorize]
         public IQueryable<Product> GetProducts([FromUri] int desde, [FromUri] int cantidad)
         {
             return db.Products.OrderBy(c => c.Id).Skip(desde - 1).Take(cantidad);
