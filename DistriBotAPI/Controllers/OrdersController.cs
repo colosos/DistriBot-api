@@ -37,6 +37,45 @@ namespace DistriBotAPI.Controllers
         }
 
         //[Authorize]
+        [Route("api/setDeliverDate")]
+        public async Task<IHttpActionResult> SetDeliverDate([FromUri] int idOrder, [FromUri] DateTime date)
+        {
+            Order oldOrder = await db.Orders.Where(o => o.Id == idOrder).FirstAsync();
+            oldOrder.PlannedDeliveryDate = date;
+            db.SaveChanges();
+            return Ok();
+        }
+
+        //[Authorize]
+        [Route("api/neededProducts")]
+        public List<Item> GetNeededProducts([FromUri] DateTime date)
+        {
+            List<Item> list = new List<Item>();
+            foreach (Order o in db.Orders.Where(o => o.PlannedDeliveryDate <= date && o.DeliveredDate == null).Include("ProductsList").Include("ProductsList.Product"))
+            {
+                foreach(Item aux in o.ProductsList)
+                {
+                    bool encontro = false;
+                    foreach(Item i in list)
+                    {
+                        
+                        if(i.Product.Id == aux.Product.Id)
+                        {
+                            i.Quantity += aux.Quantity;
+                            encontro = true;
+                            break;
+                        }
+                    }
+                    if (!encontro)
+                    {
+                        list.Add(aux);
+                    }
+                }
+            }
+            return list;
+        }
+
+        //[Authorize]
         [Route("api/deliverOrder")]
         [HttpPost]
         public async Task<IHttpActionResult> SetDeliveredFlag([FromUri] int idOrder, [FromUri] bool flag)

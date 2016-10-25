@@ -15,6 +15,8 @@ namespace DistriBotAPI.Models
 
         public DateTime? DeliveredDate { get; set; }
 
+        public DateTime PlannedDeliveryDate { get; set; }
+
         public List<Item> ProductsList { get; set; }
 
         public double Price { get; set; }
@@ -31,6 +33,7 @@ namespace DistriBotAPI.Models
             Client = cli;
             CreationDate = creationDate;
             DeliveredDate = deliverDate;
+            PlannedDeliveryDate = DateTime.Now.AddDays(7);
             ProductsList = prodsList;
             Price = price;
             Salesman = vend;

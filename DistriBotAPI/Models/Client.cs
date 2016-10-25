@@ -18,6 +18,8 @@ namespace DistriBotAPI.Models
         public string Address { get; set; }
 
         public string Phone { get; set; }
+
+        public DayOfWeek DeliverDay { get; set; }
  
         public string EmailAddress { get; set; }
 
