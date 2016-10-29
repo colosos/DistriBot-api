@@ -42,6 +42,30 @@ namespace DistriBotAPI.Controllers
             return CreatedAtRoute("DefaultApi", new { id = item.Id }, item);
         }
 
+        //[Authorize]
+        [HttpGet]
+        [Route("api/getRecommendations")]
+        public List<Product> GetRecommendations([FromUri] int CliId)
+        {
+            List<Product> recommendedProducts = new List<Product>();
+            List<Product> allProducts = db.Products.ToList();
+            int total = allProducts.Count;
+            bool[] includedProds = new bool[total];
+            int cant = 0;
+            int max = Math.Min(3, total);
+            Random r = new Random();
+            while (cant < max)
+            {
+                int sig = r.Next(total);
+                if (!includedProds[sig])
+                {
+                    includedProds[sig] = true;
+                    cant++;
+                    recommendedProducts.Add(allProducts.ElementAt(sig));
+                }
+            }
+            return recommendedProducts;
+        }
 
         // PUT: api/Items/5
         public void Put(int id, [FromBody]string value)

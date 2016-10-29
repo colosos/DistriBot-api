@@ -15,15 +15,18 @@ namespace DistriBotAPI.Models
 
         public List<Client> Clients { get; set; }
 
+        public DayOfWeek DayOfWeek { get; set; }
+
         public Route()
         {
 
         }
-        public Route(string dsc, DeliveryMan driver, List<Client> clis)
+        public Route(string dsc, DeliveryMan driver, List<Client> clis, DayOfWeek dw)
         {
             Description = dsc;
             Driver = driver;
             Clients = clis;
+            DayOfWeek = dw;
         }
     }
 }

@@ -30,13 +30,14 @@ namespace DistriBotAPI.Models
 
         }
 
-        public Client(string nmb, double lat, double lon, string dir, string tel, string mail, double creditoB)
+        public Client(string nmb, double lat, double lon, string dir, string tel, DayOfWeek dw, string mail, double creditoB)
         {
             Name = nmb;
             Latitude = lat;
             Longitude = lon;
             Address = dir;
             Phone = tel;
+            DeliverDay = dw;
             EmailAddress = mail;
             CreditBalance = creditoB;
         }
