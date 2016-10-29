@@ -14,6 +14,7 @@ using DistriBotAPI.Models;
 using Microsoft.AspNet.Identity;
 using DistriBotAPI.Authentication;
 using System.Web.Security;
+using DistriBotAPI.Utilities;
 
 namespace DistriBotAPI.Controllers
 {
@@ -44,6 +45,20 @@ namespace DistriBotAPI.Controllers
             }
 
             return Ok(deliveryMan);
+        }
+
+        //[Authorize]
+        [Route("api/getRouteForDeliveryMan")]
+        public async Task<IHttpActionResult> GetRoute([FromUri] string username, [FromUri] DayOfWeek dayOfWeek)
+        {
+            if (!Utilities.Roles.GetRole(username).Equals("deliverymen"))
+                return BadRequest();
+
+            List<Route> rutas = db.Routes.Include("Driver").Include("Clients").Where(r => r.Driver.UserName.Equals(username) && r.DayOfWeek == dayOfWeek).ToList();
+            if (rutas.Count > 0)
+                return Ok(rutas.First());
+            else
+                return Ok("No existe una ruta para esa combinacion de repartidor/dia de la semana");
         }
 
         // PUT: api/DeliveryMen/5

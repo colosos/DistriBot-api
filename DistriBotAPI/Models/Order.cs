@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DistriBotAPI.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -33,7 +34,7 @@ namespace DistriBotAPI.Models
             Client = cli;
             CreationDate = creationDate;
             DeliveredDate = deliverDate;
-            PlannedDeliveryDate = DateTime.Now.AddDays(7);
+            PlannedDeliveryDate = Orders.DeliverDay(cli.DeliverDay);
             ProductsList = prodsList;
             Price = price;
             Salesman = vend;

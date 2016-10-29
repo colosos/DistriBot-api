@@ -12,6 +12,7 @@ using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
 using Implementation;
+using DistriBotAPI.Utilities;
 
 namespace DistriBotAPI.Controllers
 {
@@ -19,6 +20,7 @@ namespace DistriBotAPI.Controllers
     {
         private Context db = new Context();
         private Implementation.IFacturation billing = (Implementation.IFacturation) new FacturationImp();
+        private IStock stock = (IStock)new SistemaStockImp();
 
         // GET: api/Orders
         //[Authorize]
@@ -27,6 +29,13 @@ namespace DistriBotAPI.Controllers
         {
             if (cantidad == 0) return db.Orders.OrderBy(c => c.Id).Skip(desde - 1);
             return db.Orders.OrderBy(c => c.Id).Skip(desde - 1).Take(cantidad);
+        }
+
+        //[Authorize]
+        [Route("api/OrdersBySalesman")]
+        public IQueryable<Order> GetOrdersBySalesman([FromUri] string nameSalesman)
+        {
+            return db.Orders.Include("Salesman").Include("Client").Where(o => o.DeliveredDate == null && o.Salesman.UserName == nameSalesman);
         }
 
         //[Authorize]
@@ -72,7 +81,17 @@ namespace DistriBotAPI.Controllers
                     }
                 }
             }
-            return list;
+            List<Item> ret = new List<Item>();
+            foreach(Item i in list)
+            {
+                int stockAct = stock.RemainingStock(i.Product.Id);
+                if (stockAct < i.Quantity)
+                {
+                    i.Quantity -= stockAct;
+                    ret.Add(i);
+                }
+            }
+            return ret;
         }
 
         //[Authorize]
@@ -236,7 +255,8 @@ namespace DistriBotAPI.Controllers
             }
             order.Salesman = db.Salesmen.Find(idSalesman);
             order.CreationDate = DateTime.Now;
-            order.DeliveredDate = DateTime.Now;
+            order.DeliveredDate = null;
+            order.PlannedDeliveryDate = Orders.DeliverDay(order.Client.DeliverDay);
             //double price = 0;
             foreach (Item i in order.ProductsList)
             {

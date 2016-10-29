@@ -30,5 +30,12 @@ namespace DistriBotAPI.Controllers
             Data.Data.LlenarBD();
             return Ok();
         }
+
+        [Route("api/deliverDay")]
+        [HttpGet]
+        public async Task<IHttpActionResult> DeliverDay()
+        {
+            return Ok(Orders.DeliverDay(DayOfWeek.Thursday));
+        }
     }
 }

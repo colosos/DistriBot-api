@@ -18,6 +18,8 @@ namespace DistriBotAPI.Utilities
                 return "salesmen";
             if (IsSupervisor(userName))
                 return "supervisor";
+            if (IsManager(userName))
+                return "manager";
             //Returns "none" allows a new user to be added to the DB as there is no user 
             //with that username
             return "none";
@@ -36,6 +38,11 @@ namespace DistriBotAPI.Utilities
         public static bool IsSupervisor(string userName)
         {
             return db.Supervisors.Where(sv => sv.UserName.Equals(userName)).Count() > 0;
+        }
+
+        public static bool IsManager(string userName)
+        {
+            return db.Managers.Where(man => man.UserName.Equals(userName)).Count() > 0;
         }
     }
 }

@@ -61,5 +61,23 @@ namespace DistriBotAPI.Data
     string pass = "123456";
             return new Supervisor("Alejandro", user, pass, pass);
         }
+        public static Manager Gerente1()
+        {
+            string user = "ger1";
+            string pass = "123456";
+            return new Manager("Gerente General", user, pass, pass);
+        }
+        public static Manager Gerente2()
+        {
+            string user = "ger2";
+            string pass = "123456";
+            return new Manager("Gerente Comercial", user, pass, pass);
+        }
+        public static Manager Gerente3()
+        {
+            string user = "ger3";
+            string pass = "123456";
+            return new Manager("Gerente Financiero", user, pass, pass);
+        }
     }
 }
