@@ -245,6 +245,7 @@
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\ManagersController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Controllers\ParmsController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\RoutesController.cs" />
     <Compile Include="Controllers\SalesmenController.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="DataAccess\CRUDItems.cs" />
     <Compile Include="DataAccess\CRUDManagers.cs" />
     <Compile Include="DataAccess\CRUDOrders.cs" />
+    <Compile Include="DataAccess\CRUDParms.cs" />
     <Compile Include="DataAccess\CRUDProducts.cs" />
     <Compile Include="DataAccess\CRUDRoutes.cs" />
     <Compile Include="DataAccess\CRUDSalesmen.cs" />
@@ -268,33 +270,10 @@
     <Compile Include="Data\Usuarios.cs" />
     <Compile Include="Interfaces\IFacturation.cs" />
     <Compile Include="Interfaces\IFinance.cs" />
-    <Compile Include="Migrations\201610021642453_m1.cs" />
-    <Compile Include="Migrations\201610021642453_m1.Designer.cs">
-      <DependentUpon>201610021642453_m1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610140317380_mmm1.cs" />
-    <Compile Include="Migrations\201610140317380_mmm1.Designer.cs">
-      <DependentUpon>201610140317380_mmm1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610242317027_mig1.cs" />
-    <Compile Include="Migrations\201610242317027_mig1.Designer.cs">
-      <DependentUpon>201610242317027_mig1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610280130331_mig11.cs" />
-    <Compile Include="Migrations\201610280130331_mig11.Designer.cs">
-      <DependentUpon>201610280130331_mig11.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610280152571_gerente.cs" />
-    <Compile Include="Migrations\201610280152571_gerente.Designer.cs">
-      <DependentUpon>201610280152571_gerente.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610282349367_migggg1.cs" />
-    <Compile Include="Migrations\201610282349367_migggg1.Designer.cs">
-      <DependentUpon>201610282349367_migggg1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610290002503_miggggggg1.cs" />
-    <Compile Include="Migrations\201610290002503_miggggggg1.Designer.cs">
-      <DependentUpon>201610290002503_miggggggg1.cs</DependentUpon>
+    <Compile Include="Interfaces\IStock.cs" />
+    <Compile Include="Migrations\201611060312259_mig1.cs" />
+    <Compile Include="Migrations\201611060312259_mig1.Designer.cs">
+      <DependentUpon>201611060312259_mig1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseProduct.cs" />
@@ -304,6 +283,7 @@
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\Manager.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\Parm.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Route.cs" />
     <Compile Include="Models\Salesman.cs" />
@@ -320,6 +300,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="apiapp.json" />
+    <None Include="Properties\PublishProfiles\DistriBotAPI - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\DistriBotAPI%28distribotresourceplan%29 %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\DistriBotAPI%28DistriBotRG%29.pubxml" />
     <None Include="Properties\PublishProfiles\distribotapiapp - Web Deploy.pubxml" />
@@ -332,32 +313,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Implementation\Implementation.csproj">
-      <Project>{8ee3a857-b356-4d8b-b73b-ef80db9b3689}</Project>
-      <Name>Implementation</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201610021642453_m1.resx">
-      <DependentUpon>201610021642453_m1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610140317380_mmm1.resx">
-      <DependentUpon>201610140317380_mmm1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610242317027_mig1.resx">
-      <DependentUpon>201610242317027_mig1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610280130331_mig11.resx">
-      <DependentUpon>201610280130331_mig11.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610280152571_gerente.resx">
-      <DependentUpon>201610280152571_gerente.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610282349367_migggg1.resx">
-      <DependentUpon>201610282349367_migggg1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610290002503_miggggggg1.resx">
-      <DependentUpon>201610290002503_miggggggg1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201611060312259_mig1.resx">
+      <DependentUpon>201611060312259_mig1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

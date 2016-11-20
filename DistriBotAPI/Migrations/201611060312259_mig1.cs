@@ -3,17 +3,17 @@ namespace DistriBotAPI.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class gerente : DbMigration
+    public partial class mig1 : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "dbo.Managers",
+                "dbo.Parms",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                        UserName = c.String(),
+                        Id = c.String(nullable: false, maxLength: 128),
+                        Description = c.String(),
+                        Value = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -21,7 +21,7 @@ namespace DistriBotAPI.Migrations
         
         public override void Down()
         {
-            DropTable("dbo.Managers");
+            DropTable("dbo.Parms");
         }
     }
 }

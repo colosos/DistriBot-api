@@ -21,20 +21,43 @@ namespace DistriBotAPI.Controllers
         // GET: api/Routes
         public IQueryable<Route> GetRoutes()
         {
-            return db.Routes;
+            return db.Routes.Include("Driver");
         }
 
         // GET: api/Routes/5
         [ResponseType(typeof(Route))]
-        public async Task<IHttpActionResult> GetRoute(int id)
+        public IHttpActionResult GetRoute(int id)
         {
-            Route route = await db.Routes.FindAsync(id);
+            Route route = db.Routes.Include("Driver").Include("Clients").Where(r => r.Id == id).First();
             if (route == null)
             {
                 return NotFound();
             }
 
             return Ok(route);
+        }
+
+        //[Authorize]
+        [Route("api/EvaluateRoute")]
+        public IHttpActionResult EvaluateGivenRoute(List<Client> clients)
+        {
+            double res = 0;
+            for(int i = 0; i < clients.Count-1; i++)
+            {
+                res += Distance(clients.ElementAt(i), clients.ElementAt(i + 1));
+            }
+            return Ok(res);
+        }
+
+        public static double Distance(Client c1, Client c2)
+        {
+            double difX = c1.Latitude - c2.Latitude;
+            double difY = c1.Longitude - c2.Longitude;
+            difX *= difX;
+            difY *= difY;
+            double dif = difX + difY;
+            dif = Math.Sqrt(dif);
+            return dif;
         }
 
         // PUT: api/Routes/5
@@ -73,14 +96,21 @@ namespace DistriBotAPI.Controllers
         }
 
         // POST: api/Routes
-        [ResponseType(typeof(Route))]
+        //[ResponseType(typeof(Route))]
+        [HttpPost]
         public async Task<IHttpActionResult> PostRoute(Route route)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
+            route.Driver = db.DeliveryMen.Find(route.Driver.Id);
+            List<Client> clients = new List<Client>();
+            foreach(Client c in route.Clients)
+            {
+                clients.Add(db.Clients.Find(c.Id));
+            }
+            route.Clients = clients;
             db.Routes.Add(route);
             await db.SaveChangesAsync();
 

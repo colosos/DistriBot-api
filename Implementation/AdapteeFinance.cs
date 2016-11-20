@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace Implementation
 {
-    public class FinanceImp : IFinance
+    public class AdapteeFinance
     {
-        public FinanceImp()
-        {
-
-        }
-
         public int ReturnBalance(int CliId, DateTime Date)
         {
             Random random = new Random();
@@ -21,6 +16,5 @@ namespace Implementation
             randomNumber -= 1000;
             return (int)randomNumber;
         }
-
     }
 }

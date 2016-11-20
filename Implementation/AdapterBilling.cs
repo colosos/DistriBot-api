@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Implementation
 {
-    public class FacturationImp : IFacturation
+    public class AdapterBilling : IFacturation
     {
+        public AdapteeBilling _adaptee = new AdapteeBilling();
+
         public void GenerateBill(List<Tuple<string, int, double>> products)
         {
-            //Generate the corresponding bill
+            _adaptee.GenerateBill(products);
         }
     }
 }

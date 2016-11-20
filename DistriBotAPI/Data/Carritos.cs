@@ -52,5 +52,35 @@ namespace DistriBotAPI.Data
             items.Add(it3);
             return items;
         }
+
+        public static double ValorCarrito1()
+        {
+            double ret = 0;
+            foreach(Item i in Carritos.Carrito1())
+            {
+                ret += i.Quantity * i.Product.Price;
+            }
+            return ret;
+        }
+
+        public static double ValorCarrito2()
+        {
+            double ret = 0;
+            foreach (Item i in Carritos.Carrito2())
+            {
+                ret += i.Quantity * i.Product.Price;
+            }
+            return ret;
+        }
+
+        public static double ValorCarrito3()
+        {
+            double ret = 0;
+            foreach (Item i in Carritos.Carrito3())
+            {
+                ret += i.Quantity * i.Product.Price;
+            }
+            return ret;
+        }
     }
 }

@@ -22,6 +22,7 @@ namespace DistriBotAPI.Contexts
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Supervisor> Supervisors { get; set; }
         public DbSet<Manager> Managers { get; set; }
+        public DbSet<Parm> Parms { get; set; }
 
         public Context() : base("Context")
         {

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace DistriBotAPI.Interfaces
 {
-    public interface IFacturation
-    {
-        void GenerateBill(List<Tuple<string,int,double>> products);
-    }
+        public interface IStock
+        {
+            int RemainingStock(int PrdId);
+        }
 }

@@ -11,16 +11,54 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
-using Implementation;
 using DistriBotAPI.Utilities;
+using System.Reflection;
+using DistriBotAPI.Interfaces;
+using System.IO;
 
 namespace DistriBotAPI.Controllers
 {
     public class OrdersController : ApiController
     {
         private Context db = new Context();
-        private Implementation.IFacturation billing = (Implementation.IFacturation) new FacturationImp();
-        private IStock stock = (IStock)new SistemaStockImp();
+        public IFacturation billing { get; set; }
+        //= (IFacturation) new AdapterBilling();
+        public IStock stock { get; set; }
+
+        public void InstanciarAdapterStock()
+        {
+            try
+            {
+                if (stock != null) return;
+                //stock = (IStock) new AdapterStock();
+                string path = @"C:\Users\Nano\Desktop\Implementation.dll";
+                if (Path.GetExtension(path) != ".dll")
+                {
+                    throw new Exception();
+                }
+                if (!File.Exists(path))
+                {
+                    throw new Exception();
+                }
+                Assembly a = Assembly.LoadFile(path);
+                Type tipo = a.GetType("Implementation.AdapterStock");
+                Type tipoInterfaz = a.GetType("Implementation.IStock");
+                if (tipo == null)
+                {
+                    throw new Exception();
+                }
+                //if (!tipo.GetInterfaces().Contains(typeof(IStock)))
+                //{
+                //    throw new Exception();
+                //}
+                stock = Activator.CreateInstance(tipo) as IStock;
+            }
+            catch(Exception e)
+            {
+                string msg = e.InnerException.ToString();
+                int a = 5;
+            }
+       }
 
         // GET: api/Orders
         //[Authorize]
@@ -36,6 +74,21 @@ namespace DistriBotAPI.Controllers
         public IQueryable<Order> GetOrdersBySalesman([FromUri] string nameSalesman)
         {
             return db.Orders.Include("Salesman").Include("Client").Where(o => o.DeliveredDate == null && o.Salesman.UserName == nameSalesman);
+        }
+
+        //[Authorize]
+        [Route("api/OrdersByDate")]
+        public IQueryable<Order> GetOrdersByDate([FromUri] DateTime date)
+        {
+            return db.Orders.Include("Salesman").Include("Client").Where(o => o.DeliveredDate == null && o.PlannedDeliveryDate.Date == date.Date);
+        }
+
+        //[Authorize]
+        [Route("api/OrdersBetweenDateRange")]
+        public IQueryable<Order> GetOrdersBetweenDates([FromUri] DateTime dateFrom, [FromUri] DateTime dateTo)
+        {
+            return db.Orders.Include("Salesman").Include("Client").Where(o => o.DeliveredDate == null && o.PlannedDeliveryDate.Date >= dateFrom.Date
+            && o.PlannedDeliveryDate.Date <= dateTo.Date);
         }
 
         //[Authorize]
@@ -110,6 +163,8 @@ namespace DistriBotAPI.Controllers
         [ResponseType(typeof(Order))]
         public async Task<IHttpActionResult> GetOrder(int id)
         {
+            InstanciarAdapterStock();
+            int stockAct = stock.RemainingStock(id);
             Order order = await db.Orders.Where(o => o.Id == id)
                 .Include("Client")
                 .Include("ProductsList")
@@ -277,7 +332,16 @@ namespace DistriBotAPI.Controllers
         [ResponseType(typeof(Order))]
         public async Task<IHttpActionResult> DeleteOrder(int id)
         {
-            Order order = await db.Orders.FindAsync(id);
+            Order order = await db.Orders.Where(o => o.Id == id).Include("ProductsList").FirstAsync();
+            List<int> deleteItems = new List<int>();
+            foreach(Item i in order.ProductsList)
+            {
+                deleteItems.Add(i.Id);
+            }
+            foreach(int aux in deleteItems)
+            {
+                db.Items.Remove(db.Items.Find(aux));
+            }
             if (order == null)
             {
                 return NotFound();

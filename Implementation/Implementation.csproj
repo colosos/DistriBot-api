@@ -40,13 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FacturationImp.cs" />
-    <Compile Include="FinanceImp.cs" />
+    <Compile Include="AdapteeBilling.cs" />
+    <Compile Include="AdapteeFinance.cs" />
+    <Compile Include="AdapteeStock.cs" />
+    <Compile Include="AdapterBilling.cs" />
+    <Compile Include="AdapterFinance.cs" />
+    <Compile Include="AdapterStock.cs" />
     <Compile Include="IFacturation.cs" />
     <Compile Include="IFinance.cs" />
     <Compile Include="IStock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SistemaStockImp.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

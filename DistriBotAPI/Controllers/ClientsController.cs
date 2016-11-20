@@ -12,9 +12,8 @@ using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
 using DistriBotAPI.Utilities;
-using DistriBotAPI.Interfaces;
-using Implementation;
 using DistriBotAPI.DataAccess;
+using DistriBotAPI.Interfaces;
 
 namespace DistriBotAPI.Controllers
 {
@@ -22,7 +21,8 @@ namespace DistriBotAPI.Controllers
     {
         //private Context db = new Context();
         private CRUDClients cc = new CRUDClients();
-        private Implementation.IFinance finance = (Implementation.IFinance) new FinanceImp();
+        private IFinance finance;
+        //= (IFinance) new AdapterFinance();
 
         // GET: api/Clients
         //[Authorize]

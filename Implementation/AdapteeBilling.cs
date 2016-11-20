@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Implementation
 {
-    public class SistemaStockImp : IStock
+    public class AdapteeBilling
     {
-        public int RemainingStock(int PrdId)
+        public void GenerateBill(List<Tuple<string, int, double>> products)
         {
-            return 1;
+            //Generate the corresponding bill
         }
     }
 }
