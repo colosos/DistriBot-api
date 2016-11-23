@@ -44,7 +44,7 @@ namespace DistriBotAPI.Controllers
         }
 
         // GET: api/UnassignedClients
-        [HttpPost]
+        [HttpGet]
         [Route("api/ClientsWithoutRoute")]
         [ResponseType(typeof(List<Client>))]
         public IHttpActionResult GetClientsWithoutRoute([FromUri] DayOfWeek dw)
@@ -74,13 +74,17 @@ namespace DistriBotAPI.Controllers
         public IHttpActionResult EvaluateGivenRoute(List<Client> clients)
         {
             double res = 0;
-            for(int i = 0; i < clients.Count-1; i++)
+            if (clients.Count == 0) return Ok(0);
+            Client cli = db.Clients.Find(clients.ElementAt(0).Id);
+            for (int i = 0; i < clients.Count-1; i++)
             {
-                Client cli = db.Clients.Find(clients.ElementAt(i).Id);
                 Client cli2 = db.Clients.Find(clients.ElementAt(i+1).Id);
                 res += Distance(cli, cli2);
+                cli = cli2;
             }
-            return Ok(res);
+            res /= 0.0078185278716642;
+            string s = res.ToString("0.0");
+            return Ok(s);
         }
 
         public static double Distance(Client c1, Client c2)
