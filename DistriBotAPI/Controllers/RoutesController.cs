@@ -24,6 +24,12 @@ namespace DistriBotAPI.Controllers
             return db.Routes.Include("Driver");
         }
 
+        [HttpOptions]
+        public IHttpActionResult GetOptions()
+        {
+            return Ok();
+        }
+
         // GET: api/Routes/5
         [ResponseType(typeof(Route))]
         public IHttpActionResult GetRoute(int id)
@@ -37,6 +43,32 @@ namespace DistriBotAPI.Controllers
             return Ok(route);
         }
 
+        // GET: api/UnassignedClients
+        [HttpPost]
+        [Route("api/ClientsWithoutRoute")]
+        [ResponseType(typeof(List<Client>))]
+        public IHttpActionResult GetClientsWithoutRoute([FromUri] DayOfWeek dw)
+        {
+            List<Client> ret = new List<Client>();
+            List<Client> aux = db.Clients.Where(c => c.DeliverDay.ToString() == dw.ToString()).ToList();
+            bool asignado = false;
+            foreach (Client c in aux)
+            {
+                foreach(Route r in db.Routes.Include("Clients").ToList())
+                {
+                    foreach(Client cli in r.Clients)
+                    {
+                        if (cli.Id == c.Id)
+                        {
+                            asignado = true;
+                        }
+                    }
+                }
+                if (!asignado) ret.Add(c);
+            }
+            return Ok(ret);
+        }
+
         //[Authorize]
         [Route("api/EvaluateRoute")]
         public IHttpActionResult EvaluateGivenRoute(List<Client> clients)
@@ -44,7 +76,9 @@ namespace DistriBotAPI.Controllers
             double res = 0;
             for(int i = 0; i < clients.Count-1; i++)
             {
-                res += Distance(clients.ElementAt(i), clients.ElementAt(i + 1));
+                Client cli = db.Clients.Find(clients.ElementAt(i).Id);
+                Client cli2 = db.Clients.Find(clients.ElementAt(i+1).Id);
+                res += Distance(cli, cli2);
             }
             return Ok(res);
         }
@@ -96,7 +130,7 @@ namespace DistriBotAPI.Controllers
         }
 
         // POST: api/Routes
-        //[ResponseType(typeof(Route))]
+        [ResponseType(typeof(Route))]
         [HttpPost]
         public async Task<IHttpActionResult> PostRoute(Route route)
         {
@@ -126,7 +160,6 @@ namespace DistriBotAPI.Controllers
             {
                 return NotFound();
             }
-
             db.Routes.Remove(route);
             await db.SaveChangesAsync();
 

@@ -5,60 +5,59 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
 using DistriBotAPI.Utilities;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using System.Reflection;
-using DistriBotAPI.Interfaces;
-using System.IO;
+using System.Configuration;
+using InterfacesDLL;
 
 namespace DistriBotAPI.Controllers
 {
     public class OrdersController : ApiController
     {
         private Context db = new Context();
-        public IFacturation billing { get; set; }
-        //= (IFacturation) new AdapterBilling();
-        public IStock stock { get; set; }
+        private IStock stock = null;
+        private IFacturation billing = null;
 
-        public void InstanciarAdapterStock()
+        public void InicializarStock()
         {
-            try
-            {
-                if (stock != null) return;
-                //stock = (IStock) new AdapterStock();
-                string path = @"C:\Users\Nano\Desktop\Implementation.dll";
-                if (Path.GetExtension(path) != ".dll")
-                {
-                    throw new Exception();
-                }
-                if (!File.Exists(path))
-                {
-                    throw new Exception();
-                }
-                Assembly a = Assembly.LoadFile(path);
-                Type tipo = a.GetType("Implementation.AdapterStock");
-                Type tipoInterfaz = a.GetType("Implementation.IStock");
-                if (tipo == null)
-                {
-                    throw new Exception();
-                }
-                //if (!tipo.GetInterfaces().Contains(typeof(IStock)))
-                //{
-                //    throw new Exception();
-                //}
-                stock = Activator.CreateInstance(tipo) as IStock;
-            }
-            catch(Exception e)
-            {
-                string msg = e.InnerException.ToString();
-                int a = 5;
-            }
-       }
+            if (stock != null) return;
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
+            // Create the blob client.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            // Retrieve a reference to a container. 
+            CloudBlobContainer container = blobClient.GetContainerReference("dlls-stock");
+            // blob reference, you can use what ever name you want
+            var blobReference = container.GetBlobReferenceFromServer("Implementation.dll");
+            var assemblyBytes = new byte[blobReference.Properties.Length];
+            blobReference.DownloadToByteArray(assemblyBytes, 0);
+            var assembly = Assembly.Load(assemblyBytes);
+            var tipo = assembly.GetType("Implementation.AdapterStock");
+            stock = Activator.CreateInstance(tipo) as IStock;
+        }
+
+        public void InicializarBilling()
+        {
+            if (billing != null) return;
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
+            // Create the blob client.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            // Retrieve a reference to a container. 
+            CloudBlobContainer container = blobClient.GetContainerReference("dlls-billing");
+            // blob reference, you can use what ever name you want
+            var blobReference = container.GetBlobReferenceFromServer("Implementation.dll");
+            var assemblyBytes = new byte[blobReference.Properties.Length];
+            blobReference.DownloadToByteArray(assemblyBytes, 0);
+            var assembly = Assembly.Load(assemblyBytes);
+            var tipo = assembly.GetType("Implementation.AdapterBilling");
+            billing = Activator.CreateInstance(tipo) as IFacturation;
+        }
 
         // GET: api/Orders
         //[Authorize]
@@ -110,7 +109,7 @@ namespace DistriBotAPI.Controllers
 
         //[Authorize]
         [Route("api/neededProducts")]
-        public List<Item> GetNeededProducts([FromUri] DateTime date)
+        public async Task<List<Item>> GetNeededProducts([FromUri] DateTime date)
         {
             List<Item> list = new List<Item>();
             foreach (Order o in db.Orders.Where(o => o.PlannedDeliveryDate <= date && o.DeliveredDate == null).Include("ProductsList").Include("ProductsList.Product"))
@@ -137,7 +136,8 @@ namespace DistriBotAPI.Controllers
             List<Item> ret = new List<Item>();
             foreach(Item i in list)
             {
-                int stockAct = stock.RemainingStock(i.Product.Id);
+                InicializarStock();
+                int stockAct = await stock.RemainingStock(i.Product.Id);
                 if (stockAct < i.Quantity)
                 {
                     i.Quantity -= stockAct;
@@ -163,8 +163,9 @@ namespace DistriBotAPI.Controllers
         [ResponseType(typeof(Order))]
         public async Task<IHttpActionResult> GetOrder(int id)
         {
-            InstanciarAdapterStock();
-            int stockAct = stock.RemainingStock(id);
+            InicializarStock();
+            int stockAct = await stock.RemainingStock(76);
+            if (db.Orders.Where(o => o.Id == id).Count() == 0) return Ok("No existen pedidos con el identificador solicitado");
             Order order = await db.Orders.Where(o => o.Id == id)
                 .Include("Client")
                 .Include("ProductsList")
@@ -381,6 +382,7 @@ namespace DistriBotAPI.Controllers
             {
                 products.Add(new Tuple<string, int, double>(aux.Product.Name, aux.Quantity, aux.Product.Price));
             }
+            InicializarBilling();
             billing.GenerateBill(products);
             return Ok();
         }

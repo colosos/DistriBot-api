@@ -26,6 +26,8 @@ namespace DistriBotAPI.Contexts
 
         public Context() : base("Context")
         {
+            this.Configuration.ProxyCreationEnabled = false;
+            this.Configuration.LazyLoadingEnabled = false;
         }
     }
 }

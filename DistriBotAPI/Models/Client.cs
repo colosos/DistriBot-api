@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -20,6 +21,9 @@ namespace DistriBotAPI.Models
         public string Phone { get; set; }
 
         public DayOfWeek DeliverDay { get; set; }
+
+        [JsonIgnore]
+        public virtual List<Route> Routes {get;set;}
  
         public string EmailAddress { get; set; }
 
@@ -27,7 +31,7 @@ namespace DistriBotAPI.Models
 
         public Client()
         {
-
+            Routes = new List<Route>();
         }
 
         public Client(string nmb, double lat, double lon, string dir, string tel, DayOfWeek dw, string mail, double creditoB)
@@ -40,6 +44,7 @@ namespace DistriBotAPI.Models
             DeliverDay = dw;
             EmailAddress = mail;
             CreditBalance = creditoB;
+            Routes = new List<Route>();
         }
     }
 }

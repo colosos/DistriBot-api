@@ -1,23 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using InterfacesDLL;
+using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Implementation
 {
     public class AdapterStock : IStock
     {
-        public AdapteeStock _adaptee { get; set; }
-
-        public int RemainingStock(int PrdId)
-        {
-           return _adaptee.checkStock(PrdId);
-        }
+        public static HttpClient client = new HttpClient();
 
         public AdapterStock()
         {
-            _adaptee = new AdapteeStock();
+            client.BaseAddress = new Uri("http://serviceslayer20161120085520.azurewebsites.net/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        }
+        public async Task<int> RemainingStock(int PrdId)
+        {
+            string path = "api/Stock?prdId=" + PrdId;
+            HttpResponseMessage response = await client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                string s = await response.Content.ReadAsStringAsync();
+                return Int32.Parse(s);
+            }
+            return 0;
         }
     }
 }

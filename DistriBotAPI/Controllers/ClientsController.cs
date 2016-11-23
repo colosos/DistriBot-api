@@ -13,7 +13,7 @@ using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
 using DistriBotAPI.Utilities;
 using DistriBotAPI.DataAccess;
-using DistriBotAPI.Interfaces;
+using InterfacesDLL;
 
 namespace DistriBotAPI.Controllers
 {

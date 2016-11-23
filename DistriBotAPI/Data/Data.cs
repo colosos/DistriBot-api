@@ -31,36 +31,36 @@ namespace DistriBotAPI.Data
 
         public static void VaciarBD()
         {
-            db.BaseProducts.RemoveRange(db.BaseProducts);
-            db.Products.RemoveRange(db.Products);
-            db.Items.RemoveRange(db.Items);
-            db.Orders.RemoveRange(db.Orders);
-            db.Salesmen.RemoveRange(db.Salesmen);
-            db.Clients.RemoveRange(db.Clients);
-            db.DeliveryMen.RemoveRange(db.DeliveryMen);
-            db.Devolutions.RemoveRange(db.Devolutions);
+            //db.BaseProducts.RemoveRange(db.BaseProducts);
+            //db.Products.RemoveRange(db.Products);
+            //db.Items.RemoveRange(db.Items);
+            //db.Orders.RemoveRange(db.Orders);
+            //db.Salesmen.RemoveRange(db.Salesmen);
+            //db.Clients.RemoveRange(db.Clients);
+            //db.DeliveryMen.RemoveRange(db.DeliveryMen);
+            //db.Devolutions.RemoveRange(db.Devolutions);
             db.Routes.RemoveRange(db.Routes);
-            db.Supervisors.RemoveRange(db.Supervisors);
-            db.Tags.RemoveRange(db.Tags);
-            db.Managers.RemoveRange(db.Managers);
-            db.Parms.RemoveRange(db.Parms);
-            foreach (var user in db.Users)
-            {
-                db.Users.Remove(user);
-            }
+            //db.Supervisors.RemoveRange(db.Supervisors);
+            //db.Tags.RemoveRange(db.Tags);
+            //db.Managers.RemoveRange(db.Managers);
+            //db.Parms.RemoveRange(db.Parms);
+            //foreach (var user in db.Users)
+            //{
+            //    db.Users.Remove(user);
+            //}
             db.SaveChanges();
         } 
         public static void LlenarBD()
         {
-            InsertarClientes();
-            InsertarProductos();
-            InsertarVendedores();
-            InsertarRepartidores();
-            InsertarSupervisores();
-            InsertarGerentes();
-            InsertarVentas();
+            //InsertarClientes();
+            //InsertarProductos();
+            //InsertarVendedores();
+            //InsertarRepartidores();
+            //InsertarSupervisores();
+            //InsertarGerentes();
+            //InsertarVentas();
             InsertarRutas();
-            InsertarParametros();
+            //InsertarParametros();
         }
         public static void InsertarParametros()
         {

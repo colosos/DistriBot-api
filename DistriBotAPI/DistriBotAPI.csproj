@@ -149,8 +149,8 @@
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.1\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Storage, Version=7.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAzure.Storage.7.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=7.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.7.2.1\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -268,12 +268,37 @@
     <Compile Include="Data\Carritos.cs" />
     <Compile Include="Data\Clientes.cs" />
     <Compile Include="Data\Usuarios.cs" />
-    <Compile Include="Interfaces\IFacturation.cs" />
-    <Compile Include="Interfaces\IFinance.cs" />
-    <Compile Include="Interfaces\IStock.cs" />
     <Compile Include="Migrations\201611060312259_mig1.cs" />
     <Compile Include="Migrations\201611060312259_mig1.Designer.cs">
       <DependentUpon>201611060312259_mig1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611220252265_miggg1.cs" />
+    <Compile Include="Migrations\201611220252265_miggg1.Designer.cs">
+      <DependentUpon>201611220252265_miggg1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611220307009_miggg11.cs" />
+    <Compile Include="Migrations\201611220307009_miggg11.Designer.cs">
+      <DependentUpon>201611220307009_miggg11.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611220307513_miggggggg1.cs" />
+    <Compile Include="Migrations\201611220307513_miggggggg1.Designer.cs">
+      <DependentUpon>201611220307513_miggggggg1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611220313586_migggggggggg1.cs" />
+    <Compile Include="Migrations\201611220313586_migggggggggg1.Designer.cs">
+      <DependentUpon>201611220313586_migggggggggg1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611220330334_mi1.cs" />
+    <Compile Include="Migrations\201611220330334_mi1.Designer.cs">
+      <DependentUpon>201611220330334_mi1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611222346578_mf1.cs" />
+    <Compile Include="Migrations\201611222346578_mf1.Designer.cs">
+      <DependentUpon>201611222346578_mf1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611230124327_mff1.cs" />
+    <Compile Include="Migrations\201611230124327_mff1.Designer.cs">
+      <DependentUpon>201611230124327_mff1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseProduct.cs" />
@@ -316,6 +341,33 @@
     <EmbeddedResource Include="Migrations\201611060312259_mig1.resx">
       <DependentUpon>201611060312259_mig1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611220252265_miggg1.resx">
+      <DependentUpon>201611220252265_miggg1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611220307009_miggg11.resx">
+      <DependentUpon>201611220307009_miggg11.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611220307513_miggggggg1.resx">
+      <DependentUpon>201611220307513_miggggggg1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611220313586_migggggggggg1.resx">
+      <DependentUpon>201611220313586_migggggggggg1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611220330334_mi1.resx">
+      <DependentUpon>201611220330334_mi1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611222346578_mf1.resx">
+      <DependentUpon>201611222346578_mf1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611230124327_mff1.resx">
+      <DependentUpon>201611230124327_mff1.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InterfacesDLL\InterfacesDLL.csproj">
+      <Project>{7F88EBFD-7380-4858-A296-5686AA7D7D14}</Project>
+      <Name>InterfacesDLL</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
