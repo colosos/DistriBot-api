@@ -14,14 +14,38 @@ using DistriBotAPI.Models;
 using DistriBotAPI.Utilities;
 using DistriBotAPI.DataAccess;
 using InterfacesDLL;
+using Microsoft.WindowsAzure.Storage;
+using System.Reflection;
+using Newtonsoft.Json;
+using System.Configuration;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace DistriBotAPI.Controllers
 {
     public class ClientsController : ApiController
     {
-        //private Context db = new Context();
+        private Context db = new Context();
         private CRUDClients cc = new CRUDClients();
         private IFinance finance;
+        private IStock stock = null;
+
+        public void InicializarStock()
+        {
+            if (stock != null) return;
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
+            // Create the blob client.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            // Retrieve a reference to a container. 
+            CloudBlobContainer container = blobClient.GetContainerReference("dlls-stock");
+            // blob reference, you can use what ever name you want
+            var blobReference = container.GetBlobReferenceFromServer("Implementation.dll");
+            var assemblyBytes = new byte[blobReference.Properties.Length];
+            blobReference.DownloadToByteArray(assemblyBytes, 0);
+            var assembly = Assembly.Load(assemblyBytes);
+            var tipo = assembly.GetType("Implementation.AdapterStock");
+            stock = Activator.CreateInstance(tipo) as IStock;
+        }
+
         //= (IFinance) new AdapterFinance();
 
         // GET: api/Clients
@@ -149,6 +173,33 @@ namespace DistriBotAPI.Controllers
         {
             int balance = finance.ReturnBalance(cliId, DateTime.Now);      
             return Ok(balance);
+        }
+
+
+        // GET: api/Products/UpdateCatalogue
+        [HttpGet]
+        [Route("api/Clients/UpdateCatalogue")]
+        public async Task<IHttpActionResult> UpdateCatalogue()
+        {
+            InicializarStock();
+            string s = await stock.ImportClientCatalogue();
+            List<Client> list = JsonConvert.DeserializeObject<List<Client>>(s);
+            int cliYaExistentes = 0;
+            int cliAgregados = 0;
+            foreach (Client cli in list)
+            {
+                if (db.Clients.Where(c => c.Name.Equals(cli.Name)).Count() == 0)
+                {
+                    db.Clients.Add(cli);
+                    cliAgregados++;
+                }
+                else
+                {
+                    cliYaExistentes++;
+                }
+            }
+            db.SaveChanges();
+            return Ok("Se agregaron " + cliAgregados + " clientes y se ignoraron " + cliYaExistentes + " que ya estaban en el catalogo de la distribuidora");
         }
     }
 }

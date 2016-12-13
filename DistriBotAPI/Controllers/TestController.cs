@@ -18,7 +18,7 @@ namespace DistriBotAPI.Controllers
         public async Task<IHttpActionResult> UpdateImages()
         {
             Images.UploadAllFiles();
-            Images.DownloadAllFiles();
+            //Images.DownloadAllFiles();
             return Ok();
         }
 

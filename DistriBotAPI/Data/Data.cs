@@ -31,36 +31,36 @@ namespace DistriBotAPI.Data
 
         public static void VaciarBD()
         {
-            //db.BaseProducts.RemoveRange(db.BaseProducts);
-            //db.Products.RemoveRange(db.Products);
-            //db.Items.RemoveRange(db.Items);
-            //db.Orders.RemoveRange(db.Orders);
-            //db.Salesmen.RemoveRange(db.Salesmen);
-            //db.Clients.RemoveRange(db.Clients);
-            //db.DeliveryMen.RemoveRange(db.DeliveryMen);
-            //db.Devolutions.RemoveRange(db.Devolutions);
+            db.BaseProducts.RemoveRange(db.BaseProducts);
+            db.Products.RemoveRange(db.Products);
+            db.Items.RemoveRange(db.Items);
+            db.Orders.RemoveRange(db.Orders);
+            db.Salesmen.RemoveRange(db.Salesmen);
+            db.Clients.RemoveRange(db.Clients);
+            db.DeliveryMen.RemoveRange(db.DeliveryMen);
+            db.Devolutions.RemoveRange(db.Devolutions);
             db.Routes.RemoveRange(db.Routes);
-            //db.Supervisors.RemoveRange(db.Supervisors);
-            //db.Tags.RemoveRange(db.Tags);
-            //db.Managers.RemoveRange(db.Managers);
-            //db.Parms.RemoveRange(db.Parms);
-            //foreach (var user in db.Users)
-            //{
-            //    db.Users.Remove(user);
-            //}
+            db.Supervisors.RemoveRange(db.Supervisors);
+            db.Tags.RemoveRange(db.Tags);
+            db.Managers.RemoveRange(db.Managers);
+            db.Parms.RemoveRange(db.Parms);
+            foreach (var user in db.Users)
+            {
+                db.Users.Remove(user);
+            }
             db.SaveChanges();
         } 
         public static void LlenarBD()
         {
-            //InsertarClientes();
-            //InsertarProductos();
-            //InsertarVendedores();
-            //InsertarRepartidores();
-            //InsertarSupervisores();
-            //InsertarGerentes();
-            //InsertarVentas();
+            InsertarClientes();
+            InsertarProductos();
+            InsertarVendedores();
+            InsertarRepartidores();
+            InsertarSupervisores();
+            InsertarGerentes();
+            InsertarVentas();
             InsertarRutas();
-            //InsertarParametros();
+            InsertarParametros();
         }
         public static void InsertarParametros()
         {
@@ -81,40 +81,40 @@ namespace DistriBotAPI.Data
         }
         public static void InsertarProductos()
         {
-            Product p1 = new Product("Manzana", "Son mas frescas por la manana", 10, "KG", 1, null);
+            Product p1 = new Product("Manzana", "Son mas frescas por la manana", "Frutas", 10, "KG", 1, null);
             prods.CreateProduct(p1);
 
-            Product p2 = new Product("Banana", "Ecuatorianas de gran tamanio", 25, "KG", 1, null);
+            Product p2 = new Product("Banana", "Ecuatorianas de gran tamanio", "Frutas", 25, "KG", 1, null);
             prods.CreateProduct(p2);
 
-            Product p3 = new Product("Pera", "Muy jugosas", 30, "KG", 1, null);
+            Product p3 = new Product("Pera", "Muy jugosas", "Frutas", 30, "KG", 1, null);
             prods.CreateProduct(p3);
 
-            Product p4 = new Product("Ciruela", "Las mejores de la ciudad", 46, "KG", 1, null);
+            Product p4 = new Product("Ciruela", "Las mejores de la ciudad", "Frutas", 46, "KG", 1, null);
             prods.CreateProduct(p4);
 
-            Product p5 = new Product("Kiwi", "Ideales para movilizar el intestino", 98, "KG", 1, null);
+            Product p5 = new Product("Kiwi", "Ideales para movilizar el intestino", "Frutas", 98, "KG", 1, null);
             prods.CreateProduct(p5);
 
-            Product p6 = new Product("Ananá", "De todos los tamaños y sabores", 70, "KG", 1, null);
+            Product p6 = new Product("Anana", "De todos los tamaños y sabores", "Frutas", 70, "KG", 1, null);
             prods.CreateProduct(p6);
 
-            Product p7 = new Product("Sandía", "Enormes", 11, "KG", 1, null);
+            Product p7 = new Product("Sandia", "Enormes", "Frutas", 11, "KG", 1, null);
             prods.CreateProduct(p7);
 
-            Product p8 = new Product("Cebolla", "Para no parar de llorar", 23, "KG", 1, null);
+            Product p8 = new Product("Cebolla", "Para no parar de llorar", "Verduras", 23, "KG", 1, null);
             prods.CreateProduct(p8);
 
-            Product p9 = new Product("Palta", "Verdes y maduras", 33, "KG", 1, null);
+            Product p9 = new Product("Palta", "Verdes y maduras", "Frutas", 33, "KG", 1, null);
             prods.CreateProduct(p9);
 
-            Product p10 = new Product("Paleta de ping pong", "Koreanas, la mejor calidad", 83, "Unit", 1, null);
+            Product p10 = new Product("Paleta de ping pong", "Deportes", "Koreanas, la mejor calidad", 83, "Unit", 1, null);
             prods.CreateProduct(p10);
 
-            Product p11 = new Product("Pelota de ping pong", "Firmes y duraderas", 20, "Unit", 1, null);
+            Product p11 = new Product("Pelota de ping pong", "Deportes", "Firmes y duraderas", 20, "Unit", 1, null);
             prods.CreateProduct(p11);
 
-            Product p12 = new Product("Mesa de ping pong", "Ideal para todas las edades", 2400, "Unit", 1, null);
+            Product p12 = new Product("Mesa de ping pong", "Deportes", "Ideal para todas las edades", 2400, "Unit", 1, null);
             prods.CreateProduct(p12);
         }
         public static void InsertarVendedores()

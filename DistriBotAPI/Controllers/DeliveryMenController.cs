@@ -85,7 +85,8 @@ namespace DistriBotAPI.Controllers
                 List<Order> ordersList = new List<Order>();
                 foreach (Order o in db.Orders.Include("Client").Include("Salesman").Include("ProductsList").Include("ProductsList.Product"))
                 {
-                    bool notDelivered = o.DeliveredDate == null;
+                    //bool notDelivered = o.DeliveredDate == null;
+                    bool notDelivered = true;
                     // bool shouldBeDelivered = o.PlannedDeliveryDate.Date == ahora;
                     bool shouldBeDelivered = true;
                     bool correspondsToDeliveryMan = names.Contains(o.Client.Name);
@@ -94,7 +95,8 @@ namespace DistriBotAPI.Controllers
                         ordersList.Add(o);
                     }
                 }
-                return Ok(ordersList);
+                IEnumerable<Order> returnList = ordersList.OrderBy(o => o.DeliveredDate);
+                return Ok(returnList);
             }
             else
                 return Ok("No existe una ruta para el dia de hoy para dicho repartidor");

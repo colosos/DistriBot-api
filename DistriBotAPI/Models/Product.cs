@@ -14,6 +14,8 @@ namespace DistriBotAPI.Models
 
         public string Description { get; set; }
 
+        public string Category { get; set; }
+
         public double Price { get; set; }
 
         [DefaultValue("KG")]
@@ -27,10 +29,11 @@ namespace DistriBotAPI.Models
         {
         }
 
-        public Product(string nmb, string dsc, double price, string unit, double unitQty, BaseProduct bp)
+        public Product(string nmb, string dsc, string category, double price, string unit, double unitQty, BaseProduct bp)
         {
             Name = nmb;
             Description = dsc;
+            Category = category;
             Price = price;
             Unit = unit;
             UnitQuantity = unitQty;

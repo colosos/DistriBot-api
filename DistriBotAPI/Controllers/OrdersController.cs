@@ -16,6 +16,8 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using System.Reflection;
 using System.Configuration;
 using InterfacesDLL;
+using DTO;
+using Newtonsoft.Json;
 
 namespace DistriBotAPI.Controllers
 {
@@ -134,9 +136,9 @@ namespace DistriBotAPI.Controllers
                 }
             }
             List<Item> ret = new List<Item>();
-            foreach(Item i in list)
+            InicializarStock();
+            foreach (Item i in list)
             {
-                InicializarStock();
                 int stockAct = await stock.RemainingStock(i.Product.Id);
                 if (stockAct < i.Quantity)
                 {
@@ -163,8 +165,6 @@ namespace DistriBotAPI.Controllers
         [ResponseType(typeof(Order))]
         public async Task<IHttpActionResult> GetOrder(int id)
         {
-            InicializarStock();
-            int stockAct = await stock.RemainingStock(76);
             if (db.Orders.Where(o => o.Id == id).Count() == 0) return Ok("No existen pedidos con el identificador solicitado");
             Order order = await db.Orders.Where(o => o.Id == id)
                 .Include("Client")

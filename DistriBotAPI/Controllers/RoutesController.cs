@@ -69,6 +69,13 @@ namespace DistriBotAPI.Controllers
             return Ok(ret);
         }
 
+        [HttpOptions]
+        [Route("api/EvaluateRoute")]
+        public IHttpActionResult GetOptionsEvaluateRoute()
+        {
+            return Ok();
+        }
+
         //[Authorize]
         [Route("api/EvaluateRoute")]
         public IHttpActionResult EvaluateGivenRoute(List<Client> clients)

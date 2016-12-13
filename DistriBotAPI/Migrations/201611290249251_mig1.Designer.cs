@@ -7,13 +7,13 @@ namespace DistriBotAPI.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class mff1 : IMigrationMetadata
+    public sealed partial class mig1 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(mff1));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(mig1));
         
         string IMigrationMetadata.Id
         {
-            get { return "201611230124327_mff1"; }
+            get { return "201611290249251_mig1"; }
         }
         
         string IMigrationMetadata.Source
