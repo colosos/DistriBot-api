@@ -89,6 +89,7 @@ namespace DistriBotAPI.Controllers
                 res += Distance(cli, cli2);
                 cli = cli2;
             }
+            //This number is used to approximate the total distance of the route to kilometres
             res /= 0.0078185278716642;
             string s = res.ToString("0.0");
             return Ok(s);

@@ -68,8 +68,8 @@ namespace DistriBotAPI.Controllers
         {
             if (!Utilities.Roles.GetRole(username).Equals("deliverymen"))
                 return BadRequest();
-            DateTime ahora = DateTime.Now.AddHours(-2).Date;
-            DayOfWeek today = ahora.DayOfWeek;
+            DateTime now = DateTime.Now.AddHours(-2).Date;
+            DayOfWeek today = now.DayOfWeek;
             List<Route> rutas = db.Routes.Include("Driver").Include("Clients").Where(r => r.Driver.UserName.Equals(username)).ToList();
             //List<Route> rutas = db.Routes.Include("Driver").Include("Clients").Where(r => r.Driver.UserName.Equals(username) && r.DayOfWeek == today).ToList();
             List<Order> orders = new List<Order>();
