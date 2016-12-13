@@ -11,9 +11,9 @@ namespace DistriBotAPI.Utilities
         {
             DayOfWeek dw1 = DateTime.Now.DayOfWeek;
             int dif = -1;
-            if (dw > dw1) dif = dw - dw1;
+            if (dw >= dw1) dif = dw - dw1;
             else dif = dw + 7 - dw1;
-            return DateTime.Now.AddDays(dif);
+            return DateTime.Now.AddDays(dif).Date;
         }
     }
 }

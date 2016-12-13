@@ -12,15 +12,40 @@ using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
 using System.Web.Security;
+using InterfacesDLL;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System.Reflection;
+using System.Configuration;
+using DTO;
+using Newtonsoft.Json;
 
 namespace DistriBotAPI.Controllers
 {
     public class ProductsController : ApiController
     {
         private Context db = new Context();
+        private IStock stock = null;
+
+        public void InicializarStock()
+        {
+            if (stock != null) return;
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
+            // Create the blob client.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            // Retrieve a reference to a container. 
+            CloudBlobContainer container = blobClient.GetContainerReference("dlls-stock");
+            // blob reference, you can use what ever name you want
+            var blobReference = container.GetBlobReferenceFromServer("Implementation.dll");
+            var assemblyBytes = new byte[blobReference.Properties.Length];
+            blobReference.DownloadToByteArray(assemblyBytes, 0);
+            var assembly = Assembly.Load(assemblyBytes);
+            var tipo = assembly.GetType("Implementation.AdapterStock");
+            stock = Activator.CreateInstance(tipo) as IStock;
+        }
 
         //GET: api/Products
-       // [Authorize]
+        // [Authorize]
         public IQueryable<Product> GetProducts([FromUri] int desde, [FromUri] int cantidad)
         {
             return db.Products.OrderBy(c => c.Id).Skip(desde - 1).Take(cantidad);
@@ -38,6 +63,45 @@ namespace DistriBotAPI.Controllers
 
             return Ok(product);
         }
+
+        // GET: api/Products/UpdateCatalogue
+        [HttpGet]
+        [Route("api/Products/UpdateCatalogue")]
+        public async Task<IHttpActionResult> UpdateCatalogue()
+        {
+            InicializarStock();
+            string s = await stock.ImportCatalogue();
+            List<ProductDTO> list = JsonConvert.DeserializeObject<List<ProductDTO>>(s);
+            int prdYaExistentes = 0;
+            int prdAgregados = 0;
+            foreach(ProductDTO prd in list)
+            {
+                if (db.Products.Where(p => p.Name.Equals(prd.Name)).Count() == 0)
+                {
+                    Product aux = JsonConvert.DeserializeObject<Product>(JsonConvert.SerializeObject(prd));
+                    db.Products.Add(aux);
+                    prdAgregados++;
+                }
+                else
+                {
+                    prdYaExistentes++;
+                }
+            }
+            db.SaveChanges();
+            return Ok("Se agregaron "+prdAgregados+" productos y se ignoraron "+prdYaExistentes+" que ya estaban en el catalogo de la distribuidora");
+        }
+
+        // GET: api/Products/CheckStock
+        [HttpGet]
+        [Route("api/Products/CheckStock")]
+        public async Task<IHttpActionResult> QueryStock()
+        {
+            InicializarStock();
+            string s = await stock.GetStockForAllProducts();
+            List<ProductStock> list = JsonConvert.DeserializeObject<List<ProductStock>>(s);
+            return Ok(list);
+        }
+
 
         // PUT: api/Products/5
         [ResponseType(typeof(void))]

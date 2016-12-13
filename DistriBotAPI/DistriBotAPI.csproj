@@ -149,12 +149,12 @@
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.1\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Storage, Version=7.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAzure.Storage.7.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=7.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.7.2.1\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
@@ -245,6 +245,7 @@
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\ManagersController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Controllers\ParmsController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\RoutesController.cs" />
     <Compile Include="Controllers\SalesmenController.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="DataAccess\CRUDItems.cs" />
     <Compile Include="DataAccess\CRUDManagers.cs" />
     <Compile Include="DataAccess\CRUDOrders.cs" />
+    <Compile Include="DataAccess\CRUDParms.cs" />
     <Compile Include="DataAccess\CRUDProducts.cs" />
     <Compile Include="DataAccess\CRUDRoutes.cs" />
     <Compile Include="DataAccess\CRUDSalesmen.cs" />
@@ -266,35 +268,9 @@
     <Compile Include="Data\Carritos.cs" />
     <Compile Include="Data\Clientes.cs" />
     <Compile Include="Data\Usuarios.cs" />
-    <Compile Include="Interfaces\IFacturation.cs" />
-    <Compile Include="Interfaces\IFinance.cs" />
-    <Compile Include="Migrations\201610021642453_m1.cs" />
-    <Compile Include="Migrations\201610021642453_m1.Designer.cs">
-      <DependentUpon>201610021642453_m1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610140317380_mmm1.cs" />
-    <Compile Include="Migrations\201610140317380_mmm1.Designer.cs">
-      <DependentUpon>201610140317380_mmm1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610242317027_mig1.cs" />
-    <Compile Include="Migrations\201610242317027_mig1.Designer.cs">
-      <DependentUpon>201610242317027_mig1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610280130331_mig11.cs" />
-    <Compile Include="Migrations\201610280130331_mig11.Designer.cs">
-      <DependentUpon>201610280130331_mig11.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610280152571_gerente.cs" />
-    <Compile Include="Migrations\201610280152571_gerente.Designer.cs">
-      <DependentUpon>201610280152571_gerente.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610282349367_migggg1.cs" />
-    <Compile Include="Migrations\201610282349367_migggg1.Designer.cs">
-      <DependentUpon>201610282349367_migggg1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610290002503_miggggggg1.cs" />
-    <Compile Include="Migrations\201610290002503_miggggggg1.Designer.cs">
-      <DependentUpon>201610290002503_miggggggg1.cs</DependentUpon>
+    <Compile Include="Migrations\201611290249251_mig1.cs" />
+    <Compile Include="Migrations\201611290249251_mig1.Designer.cs">
+      <DependentUpon>201611290249251_mig1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaseProduct.cs" />
@@ -304,6 +280,7 @@
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\Manager.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\Parm.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Route.cs" />
     <Compile Include="Models\Salesman.cs" />
@@ -320,10 +297,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="apiapp.json" />
+    <None Include="Properties\PublishProfiles\DistriBotAPI - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\DistriBotAPI%28distribotresourceplan%29 %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\DistriBotAPI%28DistriBotRG%29.pubxml" />
     <None Include="Properties\PublishProfiles\distribotapiapp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\distribotColossus.pubxml" />
+    <None Include="Properties\PublishProfiles\DistriBotDiciembreAPI - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -332,32 +311,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Implementation\Implementation.csproj">
-      <Project>{8ee3a857-b356-4d8b-b73b-ef80db9b3689}</Project>
-      <Name>Implementation</Name>
+    <ProjectReference Include="..\DTO\DTO.csproj">
+      <Project>{4036E368-9BF4-48B6-BBA4-E8589DA50240}</Project>
+      <Name>DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InterfacesDLL\InterfacesDLL.csproj">
+      <Project>{7F88EBFD-7380-4858-A296-5686AA7D7D14}</Project>
+      <Name>InterfacesDLL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201610021642453_m1.resx">
-      <DependentUpon>201610021642453_m1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610140317380_mmm1.resx">
-      <DependentUpon>201610140317380_mmm1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610242317027_mig1.resx">
-      <DependentUpon>201610242317027_mig1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610280130331_mig11.resx">
-      <DependentUpon>201610280130331_mig11.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610280152571_gerente.resx">
-      <DependentUpon>201610280152571_gerente.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610282349367_migggg1.resx">
-      <DependentUpon>201610282349367_migggg1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610290002503_miggggggg1.resx">
-      <DependentUpon>201610290002503_miggggggg1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201611290249251_mig1.resx">
+      <DependentUpon>201611290249251_mig1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

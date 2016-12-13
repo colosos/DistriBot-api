@@ -4,8 +4,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistriBotAPI", "DistriBotAPI\DistriBotAPI.csproj", "{6214AAEA-8F74-43E5-9CA6-7EB1E03926D7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8EE3A857-B356-4D8B-B73B-EF80DB9B3689} = {8EE3A857-B356-4D8B-B73B-EF80DB9B3689}
+		{7F88EBFD-7380-4858-A296-5686AA7D7D14} = {7F88EBFD-7380-4858-A296-5686AA7D7D14}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Implementation", "Implementation\Implementation.csproj", "{8EE3A857-B356-4D8B-B73B-EF80DB9B3689}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7F88EBFD-7380-4858-A296-5686AA7D7D14} = {7F88EBFD-7380-4858-A296-5686AA7D7D14}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfacesDLL", "InterfacesDLL\InterfacesDLL.csproj", "{7F88EBFD-7380-4858-A296-5686AA7D7D14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTO", "DTO\DTO.csproj", "{4036E368-9BF4-48B6-BBA4-E8589DA50240}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +32,14 @@ Global
 		{8EE3A857-B356-4D8B-B73B-EF80DB9B3689}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EE3A857-B356-4D8B-B73B-EF80DB9B3689}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EE3A857-B356-4D8B-B73B-EF80DB9B3689}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F88EBFD-7380-4858-A296-5686AA7D7D14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F88EBFD-7380-4858-A296-5686AA7D7D14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F88EBFD-7380-4858-A296-5686AA7D7D14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F88EBFD-7380-4858-A296-5686AA7D7D14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4036E368-9BF4-48B6-BBA4-E8589DA50240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4036E368-9BF4-48B6-BBA4-E8589DA50240}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4036E368-9BF4-48B6-BBA4-E8589DA50240}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4036E368-9BF4-48B6-BBA4-E8589DA50240}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

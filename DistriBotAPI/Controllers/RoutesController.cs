@@ -21,20 +21,89 @@ namespace DistriBotAPI.Controllers
         // GET: api/Routes
         public IQueryable<Route> GetRoutes()
         {
-            return db.Routes;
+            return db.Routes.Include("Driver");
+        }
+
+        [HttpOptions]
+        public IHttpActionResult GetOptions()
+        {
+            return Ok();
         }
 
         // GET: api/Routes/5
         [ResponseType(typeof(Route))]
-        public async Task<IHttpActionResult> GetRoute(int id)
+        public IHttpActionResult GetRoute(int id)
         {
-            Route route = await db.Routes.FindAsync(id);
+            Route route = db.Routes.Include("Driver").Include("Clients").Where(r => r.Id == id).First();
             if (route == null)
             {
                 return NotFound();
             }
 
             return Ok(route);
+        }
+
+        // GET: api/UnassignedClients
+        [HttpGet]
+        [Route("api/ClientsWithoutRoute")]
+        [ResponseType(typeof(List<Client>))]
+        public IHttpActionResult GetClientsWithoutRoute([FromUri] DayOfWeek dw)
+        {
+            List<Client> ret = new List<Client>();
+            List<Client> aux = db.Clients.Where(c => c.DeliverDay.ToString() == dw.ToString()).ToList();
+            bool asignado = false;
+            foreach (Client c in aux)
+            {
+                foreach(Route r in db.Routes.Include("Clients").ToList())
+                {
+                    foreach(Client cli in r.Clients)
+                    {
+                        if (cli.Id == c.Id)
+                        {
+                            asignado = true;
+                        }
+                    }
+                }
+                if (!asignado) ret.Add(c);
+            }
+            return Ok(ret);
+        }
+
+        [HttpOptions]
+        [Route("api/EvaluateRoute")]
+        public IHttpActionResult GetOptionsEvaluateRoute()
+        {
+            return Ok();
+        }
+
+        //[Authorize]
+        [Route("api/EvaluateRoute")]
+        public IHttpActionResult EvaluateGivenRoute(List<Client> clients)
+        {
+            double res = 0;
+            if (clients.Count == 0) return Ok(0);
+            Client cli = db.Clients.Find(clients.ElementAt(0).Id);
+            for (int i = 0; i < clients.Count-1; i++)
+            {
+                Client cli2 = db.Clients.Find(clients.ElementAt(i+1).Id);
+                res += Distance(cli, cli2);
+                cli = cli2;
+            }
+            //This number is used to approximate the total distance of the route to kilometres
+            res /= 0.0078185278716642;
+            string s = res.ToString("0.0");
+            return Ok(s);
+        }
+
+        public static double Distance(Client c1, Client c2)
+        {
+            double difX = c1.Latitude - c2.Latitude;
+            double difY = c1.Longitude - c2.Longitude;
+            difX *= difX;
+            difY *= difY;
+            double dif = difX + difY;
+            dif = Math.Sqrt(dif);
+            return dif;
         }
 
         // PUT: api/Routes/5
@@ -74,13 +143,20 @@ namespace DistriBotAPI.Controllers
 
         // POST: api/Routes
         [ResponseType(typeof(Route))]
+        [HttpPost]
         public async Task<IHttpActionResult> PostRoute(Route route)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
+            route.Driver = db.DeliveryMen.Find(route.Driver.Id);
+            List<Client> clients = new List<Client>();
+            foreach(Client c in route.Clients)
+            {
+                clients.Add(db.Clients.Find(c.Id));
+            }
+            route.Clients = clients;
             db.Routes.Add(route);
             await db.SaveChangesAsync();
 
@@ -96,7 +172,6 @@ namespace DistriBotAPI.Controllers
             {
                 return NotFound();
             }
-
             db.Routes.Remove(route);
             await db.SaveChangesAsync();
 

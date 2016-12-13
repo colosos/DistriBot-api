@@ -4,6 +4,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.Azure;
 using System.Drawing;
 using System.IO;
+using DistriBotAPI.Models;
 
 namespace DistriBotAPI.Utilities
 {
@@ -14,11 +15,22 @@ namespace DistriBotAPI.Utilities
             string path = @"C:\Users\Nano\Desktop\DistriBot\Products\";
             foreach (string dir in Directory.GetDirectories(path))
             {
-                string stringId = dir.Remove(0, path.Length);
+                int id = -1;
+                string prdName = dir.Remove(0, path.Length);
+                using (var ctx = new Contexts.Context()) {
+                    foreach (Product p in ctx.Products)
+                    {
+                        if (p.Name.Equals(prdName))
+                        {
+                            id = p.Id;
+                            break;
+                        }
+                    }
+                }
                 if (Directory.Exists(dir + "\\v1"))
-                    UploadFile(Int32.Parse(stringId), true, dir + "\\v1\\prod.jpg");
+                    UploadFile(id, true, dir + "\\v1\\prod.jpg");
                 if (Directory.Exists(dir + "\\v2"))
-                    UploadFile(Int32.Parse(stringId), false, dir + "\\v2\\prod.jpg");
+                    UploadFile(id, false, dir + "\\v2\\prod.jpg");
             }
         }
         public static void UploadFile(int id, bool v1, string ruta)
@@ -35,15 +47,16 @@ namespace DistriBotAPI.Utilities
             if (v1)
             {
                 // Retrieve reference to a blob named "id/v1".
-                blockBlob = container.GetBlockBlobReference(id + "/v1");
-
+                blockBlob = container.GetBlockBlobReference(id + "/v1/prod.jpg");
             }
             else
             {
                 // Retrieve reference to a blob named "id/v1".
-                blockBlob = container.GetBlockBlobReference(id + "/v2");
+                blockBlob = container.GetBlockBlobReference(id + "/v2/prod.jpg");
 
             }
+            blockBlob.Properties.ContentType = "image/jpg";
+            //blockBlob.SetProperties();
             // Create or overwrite the blob with contents from a local file.
             using (var fileStream = System.IO.File.OpenRead(ruta))
             {

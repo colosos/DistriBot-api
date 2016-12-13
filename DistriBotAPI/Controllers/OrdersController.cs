@@ -5,22 +5,61 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using DistriBotAPI.Contexts;
 using DistriBotAPI.Models;
-using Implementation;
 using DistriBotAPI.Utilities;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System.Reflection;
+using System.Configuration;
+using InterfacesDLL;
+using DTO;
+using Newtonsoft.Json;
 
 namespace DistriBotAPI.Controllers
 {
     public class OrdersController : ApiController
     {
         private Context db = new Context();
-        private Implementation.IFacturation billing = (Implementation.IFacturation) new FacturationImp();
-        private IStock stock = (IStock)new SistemaStockImp();
+        private IStock stock = null;
+        private IFacturation billing = null;
+
+        public void InicializarStock()
+        {
+            if (stock != null) return;
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
+            // Create the blob client.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            // Retrieve a reference to a container. 
+            CloudBlobContainer container = blobClient.GetContainerReference("dlls-stock");
+            // blob reference, you can use what ever name you want
+            var blobReference = container.GetBlobReferenceFromServer("Implementation.dll");
+            var assemblyBytes = new byte[blobReference.Properties.Length];
+            blobReference.DownloadToByteArray(assemblyBytes, 0);
+            var assembly = Assembly.Load(assemblyBytes);
+            var tipo = assembly.GetType("Implementation.AdapterStock");
+            stock = Activator.CreateInstance(tipo) as IStock;
+        }
+
+        public void InicializarBilling()
+        {
+            if (billing != null) return;
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
+            // Create the blob client.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            // Retrieve a reference to a container. 
+            CloudBlobContainer container = blobClient.GetContainerReference("dlls-billing");
+            // blob reference, you can use what ever name you want
+            var blobReference = container.GetBlobReferenceFromServer("Implementation.dll");
+            var assemblyBytes = new byte[blobReference.Properties.Length];
+            blobReference.DownloadToByteArray(assemblyBytes, 0);
+            var assembly = Assembly.Load(assemblyBytes);
+            var tipo = assembly.GetType("Implementation.AdapterBilling");
+            billing = Activator.CreateInstance(tipo) as IFacturation;
+        }
 
         // GET: api/Orders
         //[Authorize]
@@ -36,6 +75,21 @@ namespace DistriBotAPI.Controllers
         public IQueryable<Order> GetOrdersBySalesman([FromUri] string nameSalesman)
         {
             return db.Orders.Include("Salesman").Include("Client").Where(o => o.DeliveredDate == null && o.Salesman.UserName == nameSalesman);
+        }
+
+        //[Authorize]
+        [Route("api/OrdersByDate")]
+        public IQueryable<Order> GetOrdersByDate([FromUri] DateTime date)
+        {
+            return db.Orders.Include("Salesman").Include("Client").Where(o => o.DeliveredDate == null && o.PlannedDeliveryDate.Date == date.Date);
+        }
+
+        //[Authorize]
+        [Route("api/OrdersBetweenDateRange")]
+        public IQueryable<Order> GetOrdersBetweenDates([FromUri] DateTime dateFrom, [FromUri] DateTime dateTo)
+        {
+            return db.Orders.Include("Salesman").Include("Client").Where(o => o.DeliveredDate == null && o.PlannedDeliveryDate.Date >= dateFrom.Date
+            && o.PlannedDeliveryDate.Date <= dateTo.Date);
         }
 
         //[Authorize]
@@ -57,7 +111,7 @@ namespace DistriBotAPI.Controllers
 
         //[Authorize]
         [Route("api/neededProducts")]
-        public List<Item> GetNeededProducts([FromUri] DateTime date)
+        public async Task<List<Item>> GetNeededProducts([FromUri] DateTime date)
         {
             List<Item> list = new List<Item>();
             foreach (Order o in db.Orders.Where(o => o.PlannedDeliveryDate <= date && o.DeliveredDate == null).Include("ProductsList").Include("ProductsList.Product"))
@@ -82,9 +136,10 @@ namespace DistriBotAPI.Controllers
                 }
             }
             List<Item> ret = new List<Item>();
-            foreach(Item i in list)
+            InicializarStock();
+            foreach (Item i in list)
             {
-                int stockAct = stock.RemainingStock(i.Product.Id);
+                int stockAct = await stock.RemainingStock(i.Product.Id);
                 if (stockAct < i.Quantity)
                 {
                     i.Quantity -= stockAct;
@@ -110,6 +165,7 @@ namespace DistriBotAPI.Controllers
         [ResponseType(typeof(Order))]
         public async Task<IHttpActionResult> GetOrder(int id)
         {
+            if (db.Orders.Where(o => o.Id == id).Count() == 0) return Ok("No existen pedidos con el identificador solicitado");
             Order order = await db.Orders.Where(o => o.Id == id)
                 .Include("Client")
                 .Include("ProductsList")
@@ -277,7 +333,16 @@ namespace DistriBotAPI.Controllers
         [ResponseType(typeof(Order))]
         public async Task<IHttpActionResult> DeleteOrder(int id)
         {
-            Order order = await db.Orders.FindAsync(id);
+            Order order = await db.Orders.Where(o => o.Id == id).Include("ProductsList").FirstAsync();
+            List<int> deleteItems = new List<int>();
+            foreach(Item i in order.ProductsList)
+            {
+                deleteItems.Add(i.Id);
+            }
+            foreach(int aux in deleteItems)
+            {
+                db.Items.Remove(db.Items.Find(aux));
+            }
             if (order == null)
             {
                 return NotFound();
@@ -317,6 +382,7 @@ namespace DistriBotAPI.Controllers
             {
                 products.Add(new Tuple<string, int, double>(aux.Product.Name, aux.Quantity, aux.Product.Price));
             }
+            InicializarBilling();
             billing.GenerateBill(products);
             return Ok();
         }

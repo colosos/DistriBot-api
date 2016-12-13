@@ -53,12 +53,53 @@ namespace DistriBotAPI.Controllers
         {
             if (!Utilities.Roles.GetRole(username).Equals("deliverymen"))
                 return BadRequest();
-
-            List<Route> rutas = db.Routes.Include("Driver").Include("Clients").Where(r => r.Driver.UserName.Equals(username) && r.DayOfWeek == dayOfWeek).ToList();
+            List<Route> rutas = db.Routes.Include("Driver").Include("Clients").Where(r => r.Driver.UserName.Equals(username)).ToList();
+            //List<Route> rutas = db.Routes.Include("Driver").Include("Clients").Where(r => r.Driver.UserName.Equals(username) && r.DayOfWeek == dayOfWeek).ToList();
             if (rutas.Count > 0)
                 return Ok(rutas.First());
             else
                 return Ok("No existe una ruta para esa combinacion de repartidor/dia de la semana");
+        }
+
+
+        //[Authorize]
+        [Route("api/getOrdersForDeliveryMan")]
+        public async Task<IHttpActionResult> GetOrdersForDeliveryMan([FromUri] string username)
+        {
+            if (!Utilities.Roles.GetRole(username).Equals("deliverymen"))
+                return BadRequest();
+            DateTime now = DateTime.Now.AddHours(-2).Date;
+            DayOfWeek today = now.DayOfWeek;
+            List<Route> rutas = db.Routes.Include("Driver").Include("Clients").Where(r => r.Driver.UserName.Equals(username)).ToList();
+            //List<Route> rutas = db.Routes.Include("Driver").Include("Clients").Where(r => r.Driver.UserName.Equals(username) && r.DayOfWeek == today).ToList();
+            List<Order> orders = new List<Order>();
+            if (rutas.Count > 0)
+            {
+                List<Client> listaClientes = rutas.First().Clients;
+                List<string> names = new List<string>();
+                foreach(Client c in listaClientes)
+                {
+                    if(!names.Contains(c.Name))
+                        names.Add(c.Name);
+                }
+                List<Order> ordersList = new List<Order>();
+                foreach (Order o in db.Orders.Include("Client").Include("Salesman").Include("ProductsList").Include("ProductsList.Product"))
+                {
+                    //bool notDelivered = o.DeliveredDate == null;
+                    bool notDelivered = true;
+                    // bool shouldBeDelivered = o.PlannedDeliveryDate.Date == ahora;
+                    bool shouldBeDelivered = true;
+                    bool correspondsToDeliveryMan = names.Contains(o.Client.Name);
+                    if(notDelivered && shouldBeDelivered && correspondsToDeliveryMan)
+                    {
+                        ordersList.Add(o);
+                    }
+                }
+                IEnumerable<Order> returnList = ordersList.OrderBy(o => o.DeliveredDate);
+                return Ok(returnList);
+            }
+            else
+                return Ok("No existe una ruta para el dia de hoy para dicho repartidor");
         }
 
         // PUT: api/DeliveryMen/5
