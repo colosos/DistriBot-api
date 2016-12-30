@@ -23,13 +23,11 @@ namespace DistriBotAPI.Models
 
         public double UnitQuantity { get; set; }
 
-        public virtual BaseProduct BaseProduct { get; set; }
-
         public Product()
         {
         }
 
-        public Product(string nmb, string dsc, string category, double price, string unit, double unitQty, BaseProduct bp)
+        public Product(string nmb, string dsc, string category, double price, string unit, double unitQty)
         {
             Name = nmb;
             Description = dsc;
@@ -37,7 +35,6 @@ namespace DistriBotAPI.Models
             Price = price;
             Unit = unit;
             UnitQuantity = unitQty;
-            BaseProduct = bp;
         }
     }
 }

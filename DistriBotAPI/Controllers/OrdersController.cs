@@ -171,7 +171,7 @@ namespace DistriBotAPI.Controllers
                 .Include("ProductsList")
                 .Include("ProductsList.Product")
                 .Include("Salesman")
-                .Include("ProductsList.Product.BaseProduct").FirstAsync();
+                .FirstAsync();
             if (order == null)
             {
                 return NotFound();
@@ -198,7 +198,7 @@ namespace DistriBotAPI.Controllers
                 .Include("Client")
                 .Include("ProductsList")
                 .Include("ProductsList.Product")
-                .Include("ProductsList.Product.BaseProduct").FirstAsync();
+                .FirstAsync();
 
             if (oldOrder.Client != null)
             {
