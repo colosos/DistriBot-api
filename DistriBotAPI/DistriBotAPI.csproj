@@ -267,14 +267,6 @@
     <Compile Include="Data\Carritos.cs" />
     <Compile Include="Data\Clientes.cs" />
     <Compile Include="Data\Usuarios.cs" />
-    <Compile Include="Migrations\201611290249251_mig1.cs" />
-    <Compile Include="Migrations\201611290249251_mig1.Designer.cs">
-      <DependentUpon>201611290249251_mig1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201612130304011_limp1.cs" />
-    <Compile Include="Migrations\201612130304011_limp1.Designer.cs">
-      <DependentUpon>201612130304011_limp1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\DeliveryMan.cs" />
@@ -297,12 +289,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="apiapp.json" />
-    <None Include="Properties\PublishProfiles\DistriBotAPI - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\distribotadmin - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\DistriBotAPI%28distribotresourceplan%29 %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\DistriBotAPI%28DistriBotRG%29.pubxml" />
-    <None Include="Properties\PublishProfiles\distribotapiapp - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\distribotColossus.pubxml" />
-    <None Include="Properties\PublishProfiles\DistriBotDiciembreAPI - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\eneroapi - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -319,14 +308,6 @@
       <Project>{7F88EBFD-7380-4858-A296-5686AA7D7D14}</Project>
       <Name>InterfacesDLL</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201611290249251_mig1.resx">
-      <DependentUpon>201611290249251_mig1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201612130304011_limp1.resx">
-      <DependentUpon>201612130304011_limp1.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

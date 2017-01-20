@@ -74,17 +74,24 @@ namespace DistriBotAPI.Controllers
             List<ProductDTO> list = JsonConvert.DeserializeObject<List<ProductDTO>>(s);
             int prdYaExistentes = 0;
             int prdAgregados = 0;
+            int cont = 0;
             foreach(ProductDTO prd in list)
             {
                 if (db.Products.Where(p => p.Name.Equals(prd.Name)).Count() == 0)
                 {
                     Product aux = JsonConvert.DeserializeObject<Product>(JsonConvert.SerializeObject(prd));
                     db.Products.Add(aux);
+                    cont++;
                     prdAgregados++;
                 }
                 else
                 {
                     prdYaExistentes++;
+                }
+                if (cont == 20)
+                {
+                    db.SaveChanges();
+                    cont = 0;
                 }
             }
             db.SaveChanges();
