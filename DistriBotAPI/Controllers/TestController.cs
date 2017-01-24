@@ -1,4 +1,5 @@
-﻿using DistriBotAPI.Utilities;
+﻿using DistriBotAPI.AnomalyDetection;
+using DistriBotAPI.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,15 @@ namespace DistriBotAPI.Controllers
 {
     public class TestController : ApiController
     {
+        [Route("api/anomaly")]
+        [HttpGet]
+        public async Task<IHttpActionResult> AnomalyDetection()
+        {
+            Program.TestScoreAPI();
+            //Program.TestSeasonalityScoreAPI();
+            ProgramOutput.Main(new string[10]);
+            return Ok();
+        }
 
         [Route("api/upload")]
         [HttpGet]

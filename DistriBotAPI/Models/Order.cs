@@ -29,6 +29,16 @@ namespace DistriBotAPI.Models
 
         }
 
+        public Order(Client cli, DateTime creationDate, List<Item> prodsList, double price)
+        {
+            Client = cli;
+            CreationDate = creationDate;
+            PlannedDeliveryDate = Orders.DeliverDay(cli.DeliverDay);
+            ProductsList = prodsList;
+            Price = price;
+           // Salesman = vend;
+        }
+
         public Order(Client cli, DateTime creationDate, List<Item> prodsList, double price, Salesman vend)
         {
             Client = cli;

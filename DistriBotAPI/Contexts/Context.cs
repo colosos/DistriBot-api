@@ -16,10 +16,7 @@ namespace DistriBotAPI.Contexts
         public DbSet<Client> Clients { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Item> Items { get; set; }
-        public DbSet<Devolution> Devolutions { get; set; }
         public DbSet<Route> Routes { get; set; }
-        public DbSet<BaseProduct> BaseProducts { get; set; }
-        public DbSet<Tag> Tags { get; set; }
         public DbSet<Supervisor> Supervisors { get; set; }
         public DbSet<Manager> Managers { get; set; }
         public DbSet<Parm> Parms { get; set; }
