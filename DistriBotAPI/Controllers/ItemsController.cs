@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Newtonsoft.Json;
 
 namespace DistriBotAPI.Controllers
 {
@@ -45,26 +46,51 @@ namespace DistriBotAPI.Controllers
         //[Authorize]
         [HttpGet]
         [Route("api/getRecommendations")]
-        public List<Product> GetRecommendations([FromUri] int CliId)
+        public async Task<List<Product>> GetRecommendations([FromUri] int CliId)
         {
             List<Product> recommendedProducts = new List<Product>();
-            List<Product> allProducts = db.Products.ToList();
-            int total = allProducts.Count;
-            bool[] includedProds = new bool[total];
-            int cant = 0;
-            int max = Math.Min(3, total);
-            Random r = new Random();
-            while (cant < max)
+            using (var client = new HttpClient())
             {
-                int sig = r.Next(total);
-                if (!includedProds[sig])
+                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "bafc7bc42b2641b7ab001d7eb2f0da9e");
+                client.BaseAddress = new Uri("https://westus.api.cognitive.microsoft.com/");
+
+                string path = "recommendations/v4.0/models/0410af38-115b-4014-8a28-b3ddd8fcd57e/recommend/user?userId=" + CliId.ToString() + "&numberOfResults=3";
+                string response = await client.GetStringAsync(path);
+
+                dynamic stuff = JsonConvert.DeserializeObject(response);
+                foreach(dynamic recomItem in stuff.recommendedItems)
                 {
-                    includedProds[sig] = true;
-                    cant++;
-                    recommendedProducts.Add(allProducts.ElementAt(sig));
+                    foreach(dynamic item in recomItem.items)
+                    {
+                        string name = item.name;
+                        int id = item.id;
+                        Product prd = db.Products.Find(id);
+                        recommendedProducts.Add(prd);
+                    }
                 }
+                
             }
             return recommendedProducts;
+
+
+            //List<Product> recommendedProducts = new List<Product>();
+            //List<Product> allProducts = db.Products.ToList();
+            //int total = allProducts.Count;
+            //bool[] includedProds = new bool[total];
+            //int cant = 0;
+            //int max = Math.Min(3, total);
+            //Random r = new Random();
+            //while (cant < max)
+            //{
+            //    int sig = r.Next(total);
+            //    if (!includedProds[sig])
+            //    {
+            //        includedProds[sig] = true;
+            //        cant++;
+            //        recommendedProducts.Add(allProducts.ElementAt(sig));
+            //    }
+            //}
+            //return recommendedProducts;
         }
 
         // PUT: api/Items/5

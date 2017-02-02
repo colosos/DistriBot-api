@@ -70,8 +70,6 @@ namespace DistriBotAPI.Controllers
                     throw;
                 }
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST: api/Parms

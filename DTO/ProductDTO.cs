@@ -12,6 +12,8 @@ namespace DTO
 
         public string Description { get; set; }
 
+        public string IdOrigen { get; set; }
+
         public string Category { get; set; }
 
         public double Price { get; set; }

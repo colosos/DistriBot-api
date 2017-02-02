@@ -19,6 +19,7 @@ using System.Reflection;
 using System.Configuration;
 using DTO;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace DistriBotAPI.Controllers
 {
@@ -49,6 +50,56 @@ namespace DistriBotAPI.Controllers
         public IQueryable<Product> GetProducts([FromUri] int desde, [FromUri] int cantidad)
         {
             return db.Products.OrderBy(c => c.Id).Skip(desde - 1).Take(cantidad);
+        }
+
+        public class StringTable
+        {
+            public string[] ColumnNames { get; set; }
+            public string[,] Values { get; set; }
+        }
+
+        //GET: api/Products
+        // [Authorize]
+        [HttpGet]
+        [Route("api/Products/PPPSemanal")]
+        public async Task<IHttpActionResult> RunPPPSemanal()
+        {
+            using (var client = new HttpClient())
+            {
+                const string apiKey = "z8lYQFWE2OhOQC++OPTnVlplMCDisJ/hjzcVDQUWeFcAcgbF94p0eb3BdoPGMN5cdjVsIb1/vks3rmrrCHz5CA==";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+                client.BaseAddress = new Uri("https://ussouthcentral.services.azureml.net/workspaces/bd87a006957e4db6a3c1e651b6ca176d/services/868a504d425741fca2a561448c086f6b/execute?api-version=2.0&details=true");
+
+                foreach (Product prd in db.Products)
+                {
+                    var scoreRequest = new
+                    {
+
+                        Inputs = new Dictionary<string, StringTable>() {
+                        {
+                            "input1",
+                            new StringTable()
+                            {
+                                ColumnNames = new string[] {"ID1"},
+                                Values = new string[,] {  { prd.Id.ToString() }, }
+                            }
+                        },
+                    },
+                        GlobalParameters = new Dictionary<string, string>()
+                        {
+                        }
+                    };
+
+                    // WARNING: The 'await' statement below can result in a deadlock if you are calling this code from the UI thread of an ASP.Net application.
+                    // One way to address this would be to call ConfigureAwait(false) so that the execution does not attempt to resume on the original context.
+                    // For instance, replace code such as:
+                    //      result = await DoSomeTask()
+                    // with the following:
+                    //      result = await DoSomeTask().ConfigureAwait(false)
+                    HttpResponseMessage response = await client.PostAsJsonAsync("", scoreRequest);
+                }
+            }
+                return Ok();
         }
 
         // GET: api/Products/5
@@ -96,6 +147,43 @@ namespace DistriBotAPI.Controllers
             }
             db.SaveChanges();
             return Ok("Se agregaron "+prdAgregados+" productos y se ignoraron "+prdYaExistentes+" que ya estaban en el catalogo de la distribuidora");
+        }
+
+        // GET: api/Products/UpdateCatalogue
+        [HttpGet]
+        [Route("api/Products/UpdateCatalogueIdOrigin")]
+        public async Task<IHttpActionResult> UpdateCatalogueIdOrigin()
+        {
+            InicializarStock();
+            string s = await stock.ImportCatalogue();
+            List<ProductDTO> list = JsonConvert.DeserializeObject<List<ProductDTO>>(s);
+            int prdYaExistentes = 0;
+            int prdAgregados = 0;
+            int cont = 0;
+            foreach (ProductDTO prd in list)
+            {
+                if (db.Products.Where(p => p.Name.Equals(prd.Name)).Count() == 0)
+                {
+                    Product aux = JsonConvert.DeserializeObject<Product>(JsonConvert.SerializeObject(prd));
+                    db.Products.Add(aux);
+                    cont++;
+                    prdAgregados++;
+                }
+                else
+                {
+                    Product aux = db.Products.Where(p => p.Name.Equals(prd.Name)).First();
+                    aux.IdOrigen = prd.IdOrigen;
+                    cont++;
+                    prdYaExistentes++;
+                }
+                if (cont == 20)
+                {
+                    db.SaveChanges();
+                    cont = 0;
+                }
+            }
+            db.SaveChanges();
+            return Ok("Se agregaron " + prdAgregados + " productos y se ignoraron " + prdYaExistentes + " que ya estaban en el catalogo de la distribuidora");
         }
 
         // GET: api/Products/CheckStock
