@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using DistriBotAPI.DataAccess;
+using DistriBotAPI.Models;
 
 namespace DistriBotAPI.Controllers
 {
@@ -54,6 +56,14 @@ namespace DistriBotAPI.Controllers
         {
             OrdersML.Main();
             return Ok();
+        }
+
+        [Route("api/loadAnomalies")]
+        [HttpGet]
+        public IHttpActionResult LoadAnomaliesFromDB()
+        {
+            List<FrontEndAnomaly> aux = ReadAnomalies.main();
+            return Ok(aux);
         }
     }
 }

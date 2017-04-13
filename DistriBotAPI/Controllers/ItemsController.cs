@@ -54,7 +54,7 @@ namespace DistriBotAPI.Controllers
                 client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "bafc7bc42b2641b7ab001d7eb2f0da9e");
                 client.BaseAddress = new Uri("https://westus.api.cognitive.microsoft.com/");
 
-                string path = "recommendations/v4.0/models/0410af38-115b-4014-8a28-b3ddd8fcd57e/recommend/user?userId=" + CliId.ToString() + "&numberOfResults=3";
+                string path = "recommendations/v4.0/models/d0b95e2d-6894-489a-ad56-6763a0b31182/recommend/user?userId=" + CliId.ToString() + "&numberOfResults=3";
                 string response = await client.GetStringAsync(path);
 
                 dynamic stuff = JsonConvert.DeserializeObject(response);
