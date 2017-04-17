@@ -13,24 +13,33 @@ namespace DistriBotAPI.Utilities
         public static void UploadAllFiles()
         {
             string path = @"C:\Users\Nano\Desktop\DistriBot\Products\";
+            int cont = -400;
+            int ultimo = 0;
             foreach (string dir in Directory.GetDirectories(path))
             {
-                int id = -1;
-                string prdName = dir.Remove(0, path.Length);
-                using (var ctx = new Contexts.Context()) {
-                    foreach (Product p in ctx.Products)
+                ultimo++;
+                if (cont < 0) cont++;
+                else
+                {
+                    int id = -1;
+                    string prdName = dir.Remove(0, path.Length);
+                    using (var ctx = new Contexts.Context())
                     {
-                        if (p.Name.Equals(prdName))
+                        foreach (Product p in ctx.Products)
                         {
-                            id = p.Id;
-                            break;
+                            if (p.Name.Equals(prdName))
+                            {
+                                id = p.Id;
+                                break;
+                            }
                         }
                     }
+                    if (Directory.Exists(dir + "\\v1"))
+                        UploadFile(id, true, dir + "\\v1\\prod.jpg");
+                    if (Directory.Exists(dir + "\\v2"))
+                        UploadFile(id, false, dir + "\\v2\\prod.jpg");
+                    Console.WriteLine(ultimo.ToString());
                 }
-                if (Directory.Exists(dir + "\\v1"))
-                    UploadFile(id, true, dir + "\\v1\\prod.jpg");
-                if (Directory.Exists(dir + "\\v2"))
-                    UploadFile(id, false, dir + "\\v2\\prod.jpg");
             }
         }
         public static void UploadFile(int id, bool v1, string ruta)

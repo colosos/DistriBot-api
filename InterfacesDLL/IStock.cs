@@ -6,10 +6,18 @@ namespace InterfacesDLL
 {
         public interface IStock
         {
-        Task<int> RemainingStock(int PrdId);
+        //Returns the actual stock for all the products in the catalogue
         Task<string> GetStockForAllProducts();
-        Task<string> ImportCatalogue();
-        Task<string> ImportClientCatalogue();
+
+        //Returns the actual stock for the given product
+        Task<int> RemainingStock(int PrdId);
+
+        //Updates the actual stock for the given product
         Task<string> UpdateStock(int prdId, int diff);
+
+        //Updates the product's catalogue adding the products which are not in DistriBot yet
+        Task<string> ImportCatalogue();
+
+        Task<string> ImportClientCatalogue();
     }
 }

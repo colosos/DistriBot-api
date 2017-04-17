@@ -141,6 +141,7 @@
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -243,6 +244,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Contexts\AuthRepository.cs" />
     <Compile Include="Contexts\Context.cs" />
+    <Compile Include="Contexts\ContextFede.cs" />
     <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\DeliveryMenController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
@@ -264,15 +266,19 @@
     <Compile Include="DataAccess\CRUDRoutes.cs" />
     <Compile Include="DataAccess\CRUDSalesmen.cs" />
     <Compile Include="DataAccess\CRUDSupervisors.cs" />
+    <Compile Include="DataAccess\ReadAnomalies.cs" />
     <Compile Include="Data\Carritos.cs" />
     <Compile Include="Data\Clientes.cs" />
     <Compile Include="Data\Usuarios.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Anomaly.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\DeliveryMan.cs" />
+    <Compile Include="Models\FrontEndAnomaly.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\Manager.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderFede.cs" />
     <Compile Include="Models\Parm.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Route.cs" />
@@ -285,12 +291,15 @@
     <Compile Include="Utilities\Images.cs" />
     <Compile Include="Utilities\Location.cs" />
     <Compile Include="Utilities\Orders.cs" />
+    <Compile Include="Utilities\OrdersML.cs" />
     <Compile Include="Utilities\Roles.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="apiapp.json" />
     <None Include="Properties\PublishProfiles\distribotadmin - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\DistriBotAPI%28distribotresourceplan%29 %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\DistriBotDefensa - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\distribotfinal.pubxml" />
     <None Include="Properties\PublishProfiles\eneroapi - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

@@ -49,7 +49,7 @@ namespace DistriBotAPI.Controllers
 
         //[Authorize]
         [Route("api/getRouteForDeliveryMan")]
-        public async Task<IHttpActionResult> GetRoute([FromUri] string username, [FromUri] DayOfWeek dayOfWeek)
+        public IHttpActionResult GetRoute([FromUri] string username, [FromUri] DayOfWeek dayOfWeek)
         {
             if (!Utilities.Roles.GetRole(username).Equals("deliverymen"))
                 return BadRequest();
@@ -64,7 +64,7 @@ namespace DistriBotAPI.Controllers
 
         //[Authorize]
         [Route("api/getOrdersForDeliveryMan")]
-        public async Task<IHttpActionResult> GetOrdersForDeliveryMan([FromUri] string username)
+        public IHttpActionResult GetOrdersForDeliveryMan([FromUri] string username)
         {
             if (!Utilities.Roles.GetRole(username).Equals("deliverymen"))
                 return BadRequest();

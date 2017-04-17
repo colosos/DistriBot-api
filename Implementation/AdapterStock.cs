@@ -14,7 +14,7 @@ namespace Implementation
 
         public AdapterStock()
         {
-            client.BaseAddress = new Uri("http://eneroserviciosapi.azurewebsites.net/");
+            client.BaseAddress = new Uri("http://serviceslayer.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Clear();
         }
         public async Task<int> RemainingStock(int PrdId)

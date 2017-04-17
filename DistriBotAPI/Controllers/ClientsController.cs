@@ -26,7 +26,7 @@ namespace DistriBotAPI.Controllers
     {
         private Context db = new Context();
         private CRUDClients cc = new CRUDClients();
-        private IFinance finance;
+        private IFinance finance = null;
         private IStock stock = null;
 
         public void InicializarStock()
@@ -58,7 +58,7 @@ namespace DistriBotAPI.Controllers
 
         // GET: api/Clients/5
         [ResponseType(typeof(Client))]
-        public async Task<IHttpActionResult> GetClient(int id)
+        public IHttpActionResult GetClient(int id)
         {
             Client client = cc.GetClient(id);
             if (client == null)
@@ -71,7 +71,7 @@ namespace DistriBotAPI.Controllers
 
         // PUT: api/Clients/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutClient(int id, Client client)
+        public IHttpActionResult PutClient(int id, Client client)
         {
             if (!ModelState.IsValid)
             {
@@ -106,7 +106,7 @@ namespace DistriBotAPI.Controllers
 
         // POST: api/Clients
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PostClient(Client client)
+        public IHttpActionResult PostClient(Client client)
         {
             if (!ModelState.IsValid)
             {
@@ -118,7 +118,7 @@ namespace DistriBotAPI.Controllers
 
         // DELETE: api/Clients/5
         [ResponseType(typeof(Client))]
-        public async Task<IHttpActionResult> DeleteClient(int id)
+        public IHttpActionResult DeleteClient(int id)
         {
             Client client = cc.GetClient(id);
             if (client == null)
@@ -147,7 +147,7 @@ namespace DistriBotAPI.Controllers
         [Route("api/Clients/nearest")]
         [HttpGet]
         [ResponseType(typeof(Client))]
-        public async Task<IHttpActionResult> DetectClient([FromUri] double lat, [FromUri] double lon)
+        public IHttpActionResult DetectClient([FromUri] double lat, [FromUri] double lon)
         {
             if (cc.GetClients().Count() == 0)
             {
@@ -169,7 +169,7 @@ namespace DistriBotAPI.Controllers
 
         // RETURNS THE FINAL BALANCE OF A GIVEN CLIENT
         [Route("api/Clients/balance")]
-        public async Task<IHttpActionResult> GetBalance([FromUri] int cliId)
+        public IHttpActionResult GetBalance([FromUri] int cliId)
         {
             int balance = finance.ReturnBalance(cliId, DateTime.Now);      
             return Ok(balance);

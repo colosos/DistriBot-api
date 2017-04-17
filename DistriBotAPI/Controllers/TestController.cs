@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using DistriBotAPI.DataAccess;
+using DistriBotAPI.Models;
 
 namespace DistriBotAPI.Controllers
 {
@@ -15,7 +17,7 @@ namespace DistriBotAPI.Controllers
     {
         [Route("api/anomaly")]
         [HttpGet]
-        public async Task<IHttpActionResult> AnomalyDetection()
+        public IHttpActionResult AnomalyDetection()
         {
             Program.TestScoreAPI();
             //Program.TestSeasonalityScoreAPI();
@@ -25,7 +27,7 @@ namespace DistriBotAPI.Controllers
 
         [Route("api/upload")]
         [HttpGet]
-        public async Task<IHttpActionResult> UpdateImages()
+        public IHttpActionResult UpdateImages()
         {
             Images.UploadAllFiles();
             //Images.DownloadAllFiles();
@@ -34,7 +36,7 @@ namespace DistriBotAPI.Controllers
 
         [Route("api/resetClients")]
         [HttpGet]
-        public async Task<IHttpActionResult> ResetClients()
+        public IHttpActionResult ResetClients()
         {
             Data.Data.VaciarBD();
             Data.Data.LlenarBD();
@@ -43,9 +45,25 @@ namespace DistriBotAPI.Controllers
 
         [Route("api/deliverDay")]
         [HttpGet]
-        public async Task<IHttpActionResult> DeliverDay()
+        public IHttpActionResult DeliverDay()
         {
             return Ok(Orders.DeliverDay(DayOfWeek.Thursday));
+        }
+
+        [Route("api/loadOrders")]
+        [HttpGet]
+        public IHttpActionResult LoadOrdersForML()
+        {
+            OrdersML.Main();
+            return Ok();
+        }
+
+        [Route("api/loadAnomalies")]
+        [HttpGet]
+        public IHttpActionResult LoadAnomaliesFromDB()
+        {
+            List<FrontEndAnomaly> aux = ReadAnomalies.main();
+            return Ok(aux);
         }
     }
 }
